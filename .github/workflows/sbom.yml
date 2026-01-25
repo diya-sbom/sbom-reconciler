@@ -1,0 +1,23 @@
+name: SBOM drift check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  sbom-diff:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run SBOM diff (fail on drift)
+        run: |
+          python3 src/sbom_diff.py --fail-on-change a_cdx.json b_cdx.json
+
