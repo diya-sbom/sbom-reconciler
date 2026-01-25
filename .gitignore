@@ -1,4 +1,10 @@
+# SBOM inputs / outputs (never commit)
 a_cdx.json
 b_cdx.json
 report.json
+
+# Python cache
+__pycache__/
+*.pyc
+n
 
