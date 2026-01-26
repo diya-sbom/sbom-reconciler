@@ -6,6 +6,14 @@ SBOM diff and reconciliation tool for detecting dependency drift.
 
 Status: early / experimental
 
+⚠️ CI behavior
+
+The SBOM drift check is expected to fail when dependency drift is detected.
+This is intentional and demonstrates enforcement behavior in CI pipelines.
+
+To make CI pass, dependency changes must be reviewed and acknowledged.
+
+
 ## What it does
 
 Compares two SBOM files and reports:
