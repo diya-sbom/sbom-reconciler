@@ -1,3 +1,5 @@
+![CI](https://github.com/diya-sbom/sbom-reconciler/actions/workflows/sbom.yml/badge.svg)
+
 # sbom-reconciler
 
 SBOM diff and reconciliation tool for detecting dependency drift.
