@@ -2,19 +2,29 @@
 
 SBOM diff and reconciliation tool for detecting dependency drift.
 
-## What it does
-Compares two SBOM JSON files and outputs:
-- **added** packages
-- **removed** packages
-- **changed** packages (version drift)
+Status: early / experimental
 
-Supports:
-- **CycloneDX JSON** (`components`)
-- **SPDX JSON** (`packages`)
+## CI behavior
+
+The SBOM drift check is expected to fail when a dependency mismatch is detected.
+That failure is intentional and acts as enforcement, not a bug.
+
+To make CI pass, dependency changes must be reconciled and committed.
+
+## What it does
+
+Compares two SBOM files and reports:
+- Added dependencies
+- Removed dependencies
+- Changed dependency versions
+
+## Requirements
+
+- Python 3.10+
 
 ## Quick start
 
-### 1) Run a diff
-```bash
+Run a diff:
+
 python3 src/sbom_diff.py a_cdx.json b_cdx.json
 
