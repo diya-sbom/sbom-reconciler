@@ -2,8 +2,6 @@
 
 # sbom-reconciler
 
-# sbom-reconciler
-
 SBOM diff and reconciliation tool for detecting dependency drift.
 
 Status: early / experimental
