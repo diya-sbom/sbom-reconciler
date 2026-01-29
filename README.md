@@ -6,6 +6,8 @@ SBOM diff and reconciliation tool for detecting dependency drift.
 
 Status: early / experimental
 
+CI status reflects dependency integrity, not build health.
+
 ## CI behavior
 
 A failing CI badge indicates detected drift, not a broken build.
