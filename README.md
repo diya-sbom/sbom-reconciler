@@ -8,6 +8,8 @@ Status: early / experimental
 
 ## CI behavior
 
+A failing CI badge indicates detected drift, not a broken build.
+
 The SBOM drift check is expected to fail when a dependency mismatch is detected.
 That failure is intentional and acts as enforcement, not a bug.
 
