@@ -9,6 +9,7 @@ Status: early / experimental
 CI status reflects dependency integrity, not build health.
 
 ## CI behavior
+See [CI_INTENT.md](./CI_INTENT.md) for the formal CI intent statement.
 
 ### Auditor / Reviewer Note
 
