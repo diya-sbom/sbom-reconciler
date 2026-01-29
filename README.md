@@ -10,6 +10,12 @@ CI status reflects dependency integrity, not build health.
 
 ## CI behavior
 
+### Auditor / Reviewer Note
+
+This repository intentionally enforces SBOM baseline integrity in CI.
+A CI failure indicates a detected dependency change requiring review,
+not a compilation or test failure.
+
 A failing CI badge indicates detected drift, not a broken build.
 
 The SBOM drift check is expected to fail when a dependency mismatch is detected.
