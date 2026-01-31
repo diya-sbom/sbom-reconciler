@@ -4,6 +4,8 @@
 
 SBOM diff and reconciliation tool for detecting dependency drift.
 
+CI failures are intentional when SBOM drift is detected. See CI_INTENT.MD
+
 ## Core idea
 
 sbom-reconciler is not a scanner or an SBOM generator.
