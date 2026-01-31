@@ -1,0 +1,38 @@
+# NOTE:
+# This step intentionally fails CI when dependency drift is detected.
+# A failure indicates enforcement, not a broken build.
+
+name: SBOM drift check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: SBOM diff (CI mode)
+        run: |
+          python3 src/sbom_diff.py a_cdx.json b_cdx.json --fail-on-change --output report.json
+
+      - name: Show SBOM report (evidence)
+        if: always()
+        run: |
+          echo "---- report.json ----"
+          cat report.json || true
+
+      - name: Provenance gate (example)
+        continue-on-error: true
+        run: |
+          python3 src/provenance_check.py provenance_gate/examples/provenance_example.json aaaaaaaa
