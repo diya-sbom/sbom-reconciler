@@ -47,6 +47,16 @@ Compares two SBOM files and reports:
 
 ## Quick start
 
+Run provenance gate (example):
+
+python3 src/provenance_check.py provenance_gate/examples/provenance_example.json aaaaaaaa
+
+Evidence outputs:
+- SBOM diff writes a machine-readable JSON report (e.g., report.json) and returns an exit code.
+- Provenance gate prints a JSON result (PASS/FAIL) and returns an exit code.
+
+Treat these outputs as compliance evidence, not as a CI log.
+
 Run a diff:
 
 python3 src/sbom_diff.py a_cdx.json b_cdx.json
