@@ -4,6 +4,16 @@
 
 SBOM diff and reconciliation tool for detecting dependency drift.
 
+## Core idea
+
+sbom-reconciler is not a scanner or an SBOM generator.
+
+It is a CI enforcement tool that treats dependency drift as a failure
+condition, not a successful build.
+
+If a declared SBOM no longer matches reality, CI fails intentionally.
+The failure is resolved only by reconciling and committing the change.
+
 Status: early / experimental
 
 CI status reflects dependency integrity, not build health.
