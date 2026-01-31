@@ -122,20 +122,21 @@ def main() -> None:
     # Optional file output
     if args.output:
         Path(args.output).write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-   
-    # CI exit code
+
+     
+        # CI exit code
     has_add_remove = bool(report["added"] or report["removed"])
     has_change = bool(report["changed"])
 
     if args.fail_on_change and (has_add_remove or has_change):
         print("\nVERDICT: FAIL")
         sys.exit(1)
-
-    print("\nVERDICT: MATCH")
-    sys.exit(0)
-
+    else:
+        print("\nVERDICT: PASS")
+        sys.exit(0)
 
 
 if __name__ == "__main__":
     main()
+ 
 
