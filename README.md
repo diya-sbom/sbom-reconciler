@@ -36,6 +36,9 @@ That failure is intentional and acts as enforcement, not a bug.
 
 To make CI pass, dependency changes must be reconciled and committed.
 
+"This is SBOM-reconciler. It's not a scanner. It's a CI enforcement gate.
+CI fails when the declared SBOM doesn't match reality."
+
 ## What it does
 
 Compares two SBOM files and reports:
