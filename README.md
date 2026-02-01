@@ -63,3 +63,14 @@ Run a diff:
 
 python3 src/sbom_diff.py a_cdx.json b_cdx.json
 
+## Usage (CI enforcement model)
+
+1. Commit an SBOM as a baseline
+2. CI compare the current SBOM aginst the baseline
+3. If dependencies differ, CI fails intentionally
+4. To resolve failure, reconcile the SBOM and commit the update
+
+No automatic fixes. All changes are explicit and reviewable   
+
+
+
