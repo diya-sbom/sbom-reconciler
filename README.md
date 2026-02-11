@@ -47,11 +47,23 @@ Compares two SBOM files and reports:
 - Changed dependency versions
 
 ## Requirements
-
 - Python 3.10+
+
+## What this is
+
+This is a reconciliation gate.
+
+It detects when the SBOM baseline and the real dependency state diverge, and emits machine-readable evidence (JSON) plus a CI exit code.
+
+## What it is not
+
+- Not an SBOM generator
+- Not a vulnerability scanner
+- Not a build/test health signal
 
 ## Quick start
 
+ HEAD
 Run provenance gate (example):
 
 python3 src/provenance_check.py provenance_gate/examples/provenance_example.json aaaaaaaa
@@ -60,7 +72,11 @@ Evidence outputs:
 - SBOM diff writes a machine-readable JSON report (e.g., report.json) and returns an exit code.
 - Provenance gate prints a JSON result (PASS/FAIL) and returns an exit code.
 
-Treat these outputs as compliance evidence, not as a CI log.
+Treat these outputs as compliance evidence, not as a CI log
+
+## SBOM diff (baseline vs new)
+
+ 3d1e993 (docs: update README)
 
 Run a diff:
 
