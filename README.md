@@ -20,6 +20,31 @@ Status: early / experimental
 
 CI status reflects dependency integrity, not build health.
 
+## Control Objectives
+
+The SBOM Reconciler enforces dependency integrity by ensuring:
+
+1. Approved SBOM baselines define the expected software composition.
+2. Any deviation from the baseline is automatically detected.
+3. Drift results in intentional CI failure.
+4. Deployment proceeds only after reconciliation and approval.
+5. Dependency changes are machine-verifiable and audit-evidenced.
+
+## Control Flow (High-Level)
+
+Baseline SBOM (Committed)
+        │
+        ▼
+Current Build Generates SBOM
+        │
+        ▼
+SBOM Diff Engine
+        │
+        ▼
+Drift Detected?
+   ├── No  → CI PASS → Deploy
+   └── Yes → CI FAIL → Reconcile → Commit Updated Baseline
+   
 ## CI behavior
 See [CI_INTENT.md](./CI_INTENT.md) for the formal CI intent statement.
 
