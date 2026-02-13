@@ -20,6 +20,12 @@ Status: early / experimental
 
 CI status reflects dependency integrity, not build health.
 
+## Related design documents
+
+- [BIL (Build Intent Ledger)](BIL.md)
+- [CI Intent Model](CI_INTENT.md)
+- [Scope](Scope.md)
+
 ## Control Objectives
 
 The SBOM Reconciler enforces dependency integrity by ensuring:
