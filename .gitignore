@@ -1,7 +1,7 @@
-report.json
+# Generated BIL receipts
+bil/examples/*.json
 
 # Python cache
 __pycache__/
 *.pyc
-n
 
