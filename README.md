@@ -61,6 +61,202 @@ between the approved baseline and the current build.
 Machine-readable outputs (e.g., report.json and PASS/FAIL result)
 serve as durable compliance artifacts, not transient CI logs.
 These artifacts can be retained for audit review.
+
+## Control Mapping (Reference Alignment)
+
+The control behavior implemented by sbom-reconciler aligns with common
+security and compliance frameworks:
+
+### NIST SSDF (Secure Software Development Framework)
+- PW.4: Review and analyze software components
+- RV.1: Identify and confirm software integrity
+- RV.3: Detect unauthorized changes
+
+### SOC 2 (Trust Services Criteria)
+- CC7.2: Change management controls detect unauthorized modifications
+- CC6.1: Logical access prevents unauthorized system changes
+
+### ISO 27001
+- A.8.9: Configuration management
+- A.12.1: Change management procedures
+
+### EU Cyber Resilience Act (CRA)
+- Software component transparency
+- Integrity and traceability of dependency changes
+
+## Assessor Questions → Expected Answers
+
+This section anticipates how an auditor, CISO, or assessor would evaluate
+the control during a review.
+
+---
+
+### 1. How do you ensure declared dependencies match what is actually built?
+
+**Expected Answer:**
+We commit an SBOM as a baseline artifact.  
+CI compares the current SBOM against the baseline on every build.  
+If differences are detected, the pipeline fails intentionally.
+
+Evidence:
+- JSON diff report (e.g., report.json)
+- CI run status (PASS/FAIL)
+
+---
+
+### 2. What prevents unauthorized dependency changes from reaching production?
+
+**Expected Answer:**
+Any dependency drift triggers a CI failure.  
+The change must be reviewed and reconciled before it can be merged.
+
+Control Type:
+Preventive (blocks merge)
+
+---
+
+### 3. How is drift formally acknowledged?
+
+**Expected Answer:**
+To resolve the CI failure, teams must:
+1. Review the detected drift
+2. Validate the change is intentional
+3. Update the baseline SBOM
+4. Commit the reconciliation
+
+This creates an auditable approval trail in Git history.
+
+Control Type:
+Evidentiary (Git commit history + diff output)
+
+---
+
+### 4. What artifacts serve as compliance evidence?
+
+**Expected Answer:**
+- Machine-readable SBOM diff output (JSON)
+- CI pass/fail result
+- Git commit history for reconciliation
+- Provenance gate result (if enabled)
+
+These are treated as compliance evidence, not just CI logs.
+
+---
+
+### 5. How does this align with secure software practices?
+
+**Expected Answer:**
+The control enforces:
+- Dependency transparency
+- Configuration integrity
+- Controlled change management
+- Deterministic reconciliation
+
+It converts software drift into a measurable, enforceable control event.
+
+## Control Lifecycle – SBOM Integrity Gate
+
+The control operates across four structured phases:
+
+┌───────────────────────┐
+        │ 1. Baseline Defined   │
+        │ Commit approved SBOM  │
+        └───────────┬───────────┘
+                    │
+                    ▼
+        ┌───────────────────────┐
+        │ 2. CI Comparison      │
+        │ SBOM vs Baseline      │
+        └───────────┬───────────┘
+                    │
+        ┌───────────▼───────────┐
+        │ Drift Detected?       │
+        └───────────┬───────────┘
+            Yes     │        No
+             │      │
+             ▼      ▼
+┌────────────────┐  ┌────────────────┐
+│ Pipeline FAIL  │  │ Pipeline PASS  │
+│ Drift Blocked  │  │ Build Proceeds │
+└───────┬────────┘  └────────────────┘
+        │
+        ▼
+┌───────────────────────────────┐
+│ 3. Reconciliation Review      │
+│ Validate change intention     │
+│ Update baseline SBOM          │
+└───────────┬───────────────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ 4. Auditable Evidence         │
+│ JSON diff report              │
+│ CI result                     │
+│ Git commit history            │
+└───────────────────────────────┘
+
+### Lifecycle Summary
+
+1. A trusted SBOM baseline is committed.
+2. CI automatically compares current build output against the baseline.
+3. Drift triggers a controlled failure requiring formal reconciliation.
+4. All reconciliation steps produce machine-verifiable audit artifacts.
+
+The control is:
+- Preventive (blocks unauthorized drift)
+- Detective (identifies dependency changes)
+- Evidentiary (produces machine-readable proof)
+
+## Control Boundaries & Assumptions
+
+### What This Control Covers
+
+This control validates:
+
+- SBOM accuracy against a trusted baseline
+- Dependency drift between builds
+- Unauthorized artifact replacement
+- Provenance mismatch at build time
+- CI enforcement (pipeline-level blocking)
+
+The control operates **pre-deployment** within CI/CD.
+
+---
+
+### What This Control Does NOT Cover
+
+This control does not:
+
+- Perform vulnerability scanning
+- Assess runtime container security
+- Validate infrastructure configuration
+- Replace SAST/DAST tools
+- Monitor production environments
+
+It focuses strictly on **artifact integrity and dependency consistency**.
+
+---
+
+### Control Assumptions
+
+The effectiveness of this control assumes:
+
+- The baseline SBOM is approved and version-controlled
+- CI pipelines are access-controlled
+- Artifact hashes are generated deterministically
+- Reconciliation updates are reviewed before baseline modification
+
+If these assumptions are broken, the integrity guarantee weakens.
+
+---
+
+### Control Classification
+
+Type: Preventive + Detective + Evidentiary  
+Execution Layer: CI/CD  
+Evidence Produced: Machine-readable JSON + commit history  
+Audit Alignment: SOC 2 CC6 / ISO 27001 A.8 / EU CRA integrity requirements
+
    
 ## CI behavior
 See [CI_INTENT.md](./CI_INTENT.md) for the formal CI intent statement.
