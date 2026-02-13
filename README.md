@@ -44,6 +44,23 @@ SBOM Diff Engine
 Drift Detected?
    ├── No  → CI PASS → Deploy
    └── Yes → CI FAIL → Reconcile → Commit Updated Baseline
+
+   ## Control Classification
+
+This tool participates in multiple control layers:
+
+### Preventive Control
+CI blocks deployment when SBOM drift is detected.
+Unauthorized or undeclared dependency changes cannot proceed silently.
+
+### Detective Control
+The SBOM diff engine identifies added, removed, or modified components
+between the approved baseline and the current build.
+
+### Evidentiary Control
+Machine-readable outputs (e.g., report.json and PASS/FAIL result)
+serve as durable compliance artifacts, not transient CI logs.
+These artifacts can be retained for audit review.
    
 ## CI behavior
 See [CI_INTENT.md](./CI_INTENT.md) for the formal CI intent statement.
