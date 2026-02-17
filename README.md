@@ -1,5 +1,21 @@
 ![CI](https://github.com/diya-sbom/sbom-reconciler/actions/workflows/sbom.yml/badge.svg)
 
+## Executive Framing
+
+sbom-reconciler is a CI-enforced integrity control designed for environments where software composition must be provable, not assumed.
+
+It treats dependency drift as a governance event rather than a build inconvenience.
+
+The objective is not detection alone — it is controlled reconciliation with audit traceability.
+
+## Intended Audience
+
+- Security Assurance teams
+- IT Risk & Compliance functions
+- DevSecOps governance programs
+- Organizations operating under SOX, SOC 2, ISO 27001, or NIST-aligned frameworks
+
+
 # sbom-reconciler
 
 SBOM diff and reconciliation tool for detecting dependency drift.
@@ -9,6 +25,8 @@ CI failures are intentional when SBOM drift is detected. See CI_INTENT.MD
 ## Core idea
 
 sbom-reconciler is not a scanner or an SBOM generator.
+
+This model shifts software integrity from trust-based to evidence-based control.
 
 It is a CI enforcement tool that treats dependency drift as a failure
 condition, not a successful build.
@@ -50,6 +68,22 @@ SBOM Diff Engine
 Drift Detected?
    ├── No  → CI PASS → Deploy
    └── Yes → CI FAIL → Reconcile → Commit Updated Baseline
+
+   ## Integrity Architecture Flow
+
+This tool enforces integrity between intended software state and deployed state.
+
+1. Developer commits a declared SBOM (baseline)
+2. CI generates or retrieves the current SBOM
+3. Reconciler compares baseline vs current
+4. If drift is detected, CI fails intentionally
+5. Failure must be reconciled and committed to restore alignment
+
+This creates auditable, machine-readable evidence of dependency integrity.
+
+Monitoring observes.
+Reconciliation proves.
+
 
    ## Control Classification
 
@@ -208,14 +242,25 @@ The control operates across four structured phases:
 3. Drift triggers a controlled failure requiring formal reconciliation.
 4. All reconciliation steps produce machine-verifiable audit artifacts.
 
-The control is:
-- Preventive (blocks unauthorized drift)
-- Detective (identifies dependency changes)
-- Evidentiary (produces machine-readable proof)
+Control Type Classification:
+
+- Preventive: blocks unauthorized or unreviewed dependency drift at pipeline level
+- Detective: identifies divergence between declared and actual build state
+- Evidentiary: generates machine-verifiable artifacts suitable for audit review
+
 
 ## Control Boundaries & Assumptions
 
 ### What This Control Covers
+
+### What This Control Does Not Cover
+
+- Vulnerability severity scoring
+- Runtime behavioral monitoring
+- Host or network intrusion detection
+- Secure coding analysis
+
+This control focuses strictly on integrity of declared software composition and build-state reconciliation.
 
 This control validates:
 
