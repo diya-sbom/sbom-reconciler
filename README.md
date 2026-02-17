@@ -54,6 +54,27 @@ The SBOM Reconciler enforces dependency integrity by ensuring:
 4. Deployment proceeds only after reconciliation and approval.
 5. Dependency changes are machine-verifiable and audit-evidenced.
 
+## Control Model
+
+This control enforces reconciliation between:
+
+1. Intended State (Committed SBOM baseline)
+2. Built State (CI-generated SBOM at build time)
+3. Deployed Artifact (Optional future phase)
+
+Control Objective:
+Ensure software deployed matches the declared and approved dependency baseline.
+
+Control Type:
+- Preventive (CI blocks unauthorized drift)
+- Detective (Identifies dependency changes)
+- Evidentiary (Produces machine-verifiable proof)
+
+Control Output:
+- Pass / Fail
+- Diff artifact
+- Commit traceability
+
 ## Control Flow (High-Level)
 
 Baseline SBOM (Committed)
