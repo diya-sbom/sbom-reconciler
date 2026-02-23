@@ -54,6 +54,16 @@ The SBOM Reconciler enforces dependency integrity by ensuring:
 4. Deployment proceeds only after reconciliation and approval.
 5. Dependency changes are machine-verifiable and audit-evidenced.
 
+Control Demonstration (local):
+
+EXPECTED_SHA=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+python3 src/provenance_check.py provenance_gate/examples/provenance_example.json "$EXPECTED_SHA"
+echo $?   # 0 = PASS
+
+python3 src/provenance_check.py provenance_gate/examples/provenance_example.json "${EXPECTED_SHA%?}b"
+echo $?   # 1 = FAIL
+
 ## Control Model
 
 This control enforces reconciliation between:
