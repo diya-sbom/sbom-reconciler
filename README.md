@@ -46,21 +46,38 @@ CI status reflects dependency integrity, not build health.
 
 ## Control Objectives
 
-The SBOM Reconciler enforces dependency integrity by ensuring:
+The SBOM Reconciler enforces software supply chain integrity by:
 
-1. Approved SBOM baselines define the expected software composition.
-2. Any deviation from the baseline is automatically detected.
-3. Drift results in intentional CI failure.
-4. Deployment proceeds only after reconciliation and approval.
-5. Dependency changes are machine-verifiable and audit-evidenced.
+1. Detecting dependency drift against an approved SBOM baseline.
+2. Validating artifact provenance using SHA-256 digest comparison.
+3. Failing CI/CD pipelines when integrity conditions are not met.
+4. Requiring reconciliation and approval before deployment proceeds.
+5. Generating machine-readable JSON evidence for audit purposes.
 
-Control Demonstration (local):
+## CI Security Gate Behavior
 
+The combined CI gate executes two independent controls:
+
+- **SBOM Drift Check** — compares the build SBOM against the approved baseline.
+- **Provenance Integrity Check** — validates artifact hash against signed provenance.
+
+If either control fails, the pipeline exits with a non-zero status code and deployment is blocked.
+
+Exit Codes:
+- `0` → PASS
+- `1` → Integrity violation detected
+- `2` → Misconfiguration / incomplete input
+
+## Control Demonstration (Local)
+
+```bash
 EXPECTED_SHA=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
+# Provenance PASS
 python3 src/provenance_check.py provenance_gate/examples/provenance_example.json "$EXPECTED_SHA"
 echo $?   # 0 = PASS
 
+# Provenance FAIL
 python3 src/provenance_check.py provenance_gate/examples/provenance_example.json "${EXPECTED_SHA%?}b"
 echo $?   # 1 = FAIL
 
