@@ -1,19 +1,31 @@
-![CI](https://github.com/diya-sbom/sbom-reconciler/actions/workflows/sbom.yml/badge.svg)
+[![CI Status](https://github.com/diya-sbom/sbom-reconciler/actions/workflows/ci.yml/badge.svg)](https://github.com/diya-sbom/sbom-reconciler/actions)
+
+# SBOM Reconciler Deterministic Software Supply Chain Integrity Gate
 
 ## Executive Framing
 
-sbom-reconciler is a CI-enforced integrity control designed for environments where software composition must be provable, not assumed.
+sbom-reconciler is a deterministic CI-enforced integrity control for software supply chains.
 
-It treats dependency drift as a governance event rather than a build inconvenience.
+It ensures that build outputs are provable — not assumed.
 
-The objective is not detection alone — it is controlled reconciliation with audit traceability.
+Dependency drift is treated as a governance event, not merely a build variation.
+
+Integrity violations result in intentional pipeline failure, requiring reconciliation before deployment.
 
 ## Intended Audience
 
-- Security Assurance teams
+- Security Assurance and AppSec teams
 - IT Risk & Compliance functions
 - DevSecOps governance programs
-- Organizations operating under SOX, SOC 2, ISO 27001, or NIST-aligned frameworks
+- Organizations operating under SOX, SOC 2, ISO 27001, or NIST-aligned controls
+
+## Control Classification
+
+Control Type: Preventive + Detective  
+Automation Level: Fully automated in CI/CD  
+Evidence Produced: Machine-readable JSON  
+Failure Mode: Deterministic pipeline exit (non-zero)  
+Approval Model: Explicit reconciliation required before redeployment
 
 
 # sbom-reconciler
