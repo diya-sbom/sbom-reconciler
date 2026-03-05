@@ -1,2 +1,7 @@
+# Private signing key
 cosign.key
-cosign.key
+
+# Demo / local artifacts
+artifact.txt
+artifact.sha256
+attest/
