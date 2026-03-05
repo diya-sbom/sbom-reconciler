@@ -1,0 +1,46 @@
+Business Source License 1.1
+
+License text copyright (c) 2017 MariaDB Corporation Ab, All Rights Reserved.
+“Business Source License” is a trademark of MariaDB Corporation Ab.
+
+-------------------------------------------------------------------------------
+Parameters
+
+Licensor: Diya Labs Inc.
+
+Licensed Work: SBOM Reconciler / Provenance Gate (sbom-reconciler)
+
+Additional Use Grant:
+You may use, copy, modify, and redistribute the Licensed Work for internal,
+non-production, and evaluation purposes only. Commercial use, production use,
+and offering the Licensed Work or a Derivative Work as a hosted or managed
+service require a separate commercial license from the Licensor.
+
+Change Date: 2029-01-01
+
+Change License: Apache License, Version 2.0
+-------------------------------------------------------------------------------
+
+Terms
+
+The Licensor hereby grants you the right to copy, modify, create derivative
+works, redistribute, and make non-production use of the Licensed Work.
+
+The Licensor may make additional grants of rights in the Licensed Work in
+accordance with the Additional Use Grant.
+
+You may not use the Licensed Work in production, for commercial purposes, or
+offer it as a service, except as permitted by the Additional Use Grant.
+
+On the Change Date, the Licensed Work will become available under the Change
+License.
+
+-------------------------------------------------------------------------------
+Disclaimer
+
+THE LICENSED WORK IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE LICENSED WORK OR THE USE OR OTHER DEALINGS IN THE LICENSED WORK.
