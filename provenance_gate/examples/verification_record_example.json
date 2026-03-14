@@ -1,0 +1,30 @@
+## Record Header
+
+Every Verification Record must contain the following header fields.
+
+- `record_type` — must be `verification_record`
+- `version` — format version
+- `artifact` — identifier of the verified artifact
+- `artifact_sha256` — SHA256 digest of the artifact
+- `checks` — results of verification modules
+- `decision` — PASS or FAIL
+- `timestamp` — verification time in UTC ISO-8601
+
+
+{
+  "record_type": "verification_record",
+  "version": "1.0",
+
+  "artifact": "artifact.txt",
+  "artifact_sha256": "27dd98b932f7873e026a9612ee691636c9aa6b7077319d1888462b6e7325da4b",
+
+  "checks": {
+    "signature": "PASS",
+    "identity_state": "PASS",
+    "license_policy": "PASS"
+  },
+
+  "decision": "PASS",
+
+  "timestamp": "2026-03-13T00:00:00Z"
+}
