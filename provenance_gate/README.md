@@ -17,7 +17,26 @@ Version: v1.0-engine
 
 Engine semantics frozen.
 Future changes are additive only through modules and policies.
+---
 
+## Verification Record
+
+The core output of the system is a **Verification Record**.
+
+A Verification Record captures:
+
+- artifact identity
+- artifact hash
+- verification checks
+- policy decision
+- timestamp
+
+Example:
+
+examples/verification_record_example.json
+
+The Verification Record is designed to be tool-agnostic and stable.  
+Policies, pipelines, and auditors can reference the record format without depending on the CLI implementation.
 ---
 
 ## Architecture
