@@ -19,6 +19,28 @@ Engine semantics frozen.
 Future changes are additive only through modules and policies.
 ---
 
+## System Flow
+
+The system acts as a verification layer between automation and execution.
+
+Automation (CI / AI agents / cloud automation)
+        ↓
+Verification Gate
+        ↓
+Policy Decision
+        ↓
+Execution
+        ↓
+Verification Record
+        ↓
+Evidence Bundle
+        ↓
+Ledger Entry
+        ↓
+Hash-Chained History
+
+---
+
 ## Verification Record
 
 The core output of the system is a **Verification Record**.
