@@ -22,3 +22,31 @@ Purpose:
 - engineers run it
 - reviewers scan it
 - the workflow is understandable in under a minute
+
+## Verification Record
+
+This example produces a Verification Record describing the verification decision.
+
+The record represents the public contract of the verification system.
+
+See:
+
+docs/verification-record.md
+
+## Example Flow
+
+artifact.txt
+↓
+provenance verify
+↓
+PASS / FAIL
+↓
+evidence bundle generated
+↓
+Verification Record
+↓
+ledger entry
+↓
+ledger verification
+↓
+deployment allowed
