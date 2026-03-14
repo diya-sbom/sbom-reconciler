@@ -1,0 +1,62 @@
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+from typing import Any, Dict
+
+
+def sha256_file(path: Path) -> str:
+    """Return SHA-256 of a file."""
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def verify_artifact(artifact_path: str) -> Dict[str, Any]:
+    """
+    Verification gate:
+    - checks artifact exists
+    - computes digest
+    - returns verification result
+    """
+    artifact = Path(artifact_path)
+
+    if not artifact.exists():
+        return {
+            "ok": False,
+            "artifact_path": str(artifact),
+            "reason": "artifact_not_found",
+        }
+
+    if not artifact.is_file():
+        return {
+            "ok": False,
+            "artifact_path": str(artifact),
+            "reason": "artifact_not_a_file",
+        }
+
+    digest = sha256_file(artifact)
+    size_bytes = artifact.stat().st_size
+
+    return {
+        "ok": True,
+        "artifact_path": str(artifact),
+        "artifact_name": artifact.name,
+        "sha256": digest,
+        "size_bytes": size_bytes,
+        "verification_type": "artifact_hash",
+    }
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Run verification gate on an artifact.")
+    parser.add_argument("artifact", help="Path to artifact file")
+    args = parser.parse_args()
+
+    result = verify_artifact(args.artifact)
+    print(json.dumps(result, indent=2))

@@ -1,0 +1,8 @@
+{
+  "trusted_builders": [
+    "github-actions",
+    "gitlab-ci",
+    "trusted-ci-system",
+    "local-dev-builder"
+  ]
+}

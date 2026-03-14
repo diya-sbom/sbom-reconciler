@@ -1,0 +1,6 @@
+{
+  "builder": "example-ci",
+  "build_type": "release",
+  "artifact": "example_artifact.txt",
+  "timestamp": "2026-03-13T00:00:00Z"
+}

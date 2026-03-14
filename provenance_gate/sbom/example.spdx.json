@@ -1,0 +1,19 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "example-artifact",
+  "documentNamespace": "http://example.com/spdx/example-artifact",
+  "creationInfo": {
+    "created": "2026-03-08T00:00:00Z",
+    "creators": ["Tool: diy-provenance-gate"]
+  },
+  "packages": [
+    {
+      "name": "example-package",
+      "SPDXID": "SPDXRef-Package",
+      "versionInfo": "1.0",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    }
+  ]
+}

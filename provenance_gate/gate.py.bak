@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+def run_attestation_check(artifact: str, attestation: str) -> tuple[int, str, str]:
+    """
+    Runs the existing attestation checker as a subprocess so this wrapper
+    stays stable even if internals change.
+    Returns: (exit_code, stdout, stderr)
+    """
+    cmd = [
+        sys.executable,
+        "attest/attestation_check.py",
+        artifact,
+        attestation,
+    ]
+    p = subprocess.run(cmd, capture_output=True, text=True)
+    return p.returncode, (p.stdout or "").strip(), (p.stderr or "").strip()
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        prog="provenance_gate",
+        description="Top-level dispatcher for Provenance Gate",
+    )
+    parser.add_argument("--artifact", required=True, help="Path to artifact file (e.g., artifact.txt)")
+    parser.add_argument("--attestation", required=True, help="Path to attestation JSON (in-toto/SLSA statement)")
+    parser.add_argument("--quiet", action="store_true", help="Only print PASS/FAIL line")
+
+    args = parser.parse_args()
+
+    artifact_path = Path(args.artifact)
+    att_path = Path(args.attestation)
+
+    if not artifact_path.exists():
+        print(json.dumps({"result": "FAIL", "error": "artifact_not_found", "path": str(artifact_path)}, indent=2))
+        return 2
+
+    if not att_path.exists():
+        print(json.dumps({"result": "FAIL", "error": "attestation_not_found", "path": str(att_path)}, indent=2))
+        return 2
+
+    code, out, err = run_attestation_check(str(artifact_path), str(att_path))
+
+    from sbom.license_check import check_licenses
+
+    lic_result = check_licenses(
+        "sbom/example.spdx.json",
+        "policy/license_policy.json"
+    )
+
+    if lic_result["result"] != "PASS":
+        print(json.dumps(lic_result))
+        sys.exit(1)
+   
+     # Prefer stdout JSON from the checker.
+if out:
+    result = json.loads(out)
+
+    Path("evidence").mkdir(exist_ok=True)
+    Path("evidence/gate_result.json").write_text(
+        json.dumps(result, indent=2)
+    )
+
+    if args.quiet:
+        try:
+            obj = json.loads(out)
+            print(obj.get("result", "UNKNOWN"))
+        except Exception:
+            print("UNKNOWN")
+    else:
+        print(out)
+
+else:
+    # If checker didn't print JSON, print a wrapper error.
+    payload = {"result": "FAIL", "error": "checker_no_output"}
+
+    if err:
+        payload["stderr"] = err
+
+    print(json.dumps(payload, indent=2))
+
+    Path("evidence").mkdir(exist_ok=True)
+    Path("evidence/gate_result.json").write_text(
+         json.dumps(payload, indent=2)
+    )
+
+     # Mirror the checker exit code:
+     # 0 = PASS, 1 = FAIL, 2+ = usage/system errors
+     return code if code in (0,1,2) else 2
+    
+
+if __name__ == "__main__":
+    raise SystemExit(main())

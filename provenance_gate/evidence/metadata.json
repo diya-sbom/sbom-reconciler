@@ -1,0 +1,8 @@
+{
+  "sha256": "ecf701f727d9e2d77c4aa49ac6fbbcc997278aca010bddeeb961c10cf54d435a",
+  "predicateType": "https://slsa.dev/provenance/v0.2",
+  "_type": "https://in-toto.io/Statement/v0.1",
+  "builder_id": "local-dev-builder",
+  "sbom_spdx_version": "SPDX-2.3",
+  "sbom_packages": 1
+}

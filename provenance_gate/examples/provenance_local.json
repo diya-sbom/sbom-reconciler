@@ -1,0 +1,12 @@
+{
+  "_type": "https://in-toto.io/Statement/v0.1",
+  "subject": [
+    {
+      "name": "artifact.txt",
+      "digest": {
+        "sha256": "cbe85c00aee2b85404754f743234075a4a074630778ffc3c0bad502dcae1d9b1"
+      }
+    }
+  ],
+  "predicateType": "https://slsa.dev/provenance/v1"
+}

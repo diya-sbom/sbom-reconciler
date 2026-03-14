@@ -1,0 +1,9 @@
+{
+  "modules": [
+    {
+      "module": "provenant_identity_state",
+      "result": "PASS",
+      "message": "identity state verification placeholder"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.3",
+  "packages": [
+    {
+      "name": "example-lib",
+      "versionInfo": "1.0.0",
+      "licenseConcluded": "MIT"
+    },
+    {
+      "name": "example-bad-lib",
+      "versionInfo": "2.0.0",
+      "licenseConcluded": "GPL-3.0"
+    }
+  ]
+}

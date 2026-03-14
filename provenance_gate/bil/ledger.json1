@@ -1,0 +1,4 @@
+{"timestamp":"2026-03-03T22:05:00Z","artifact":"artifact.txt","sha256":"cbe85c00aee2b85404754f743234075a4a074630778ffc3c0bad502dcae1d9b1","result":"PASS","tool":"provenance_check"}
+
+{"timestamp":"2026-03-03T22:10:00Z","artifact":"artifact.txt","digest":"sha256:cbe85c00aee2b85404754f743234075a4a074630778ffc3c0bad502dcae1d9b1","builder":"local-mac","approver":"local-dev","decision":"PASS","previous_hash":"GENESIS","entry_hash":"TEMP"}
+

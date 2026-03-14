@@ -1,0 +1,6 @@
+{
+  "builder": "ci-runner",
+  "build_type": "release",
+  "artifact": "artifact.txt",
+  "timestamp": "2026-03-13T00:00:00Z"
+}

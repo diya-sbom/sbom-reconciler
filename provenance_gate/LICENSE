@@ -10,6 +10,20 @@ Licensor: Diya Labs Inc.
 
 Licensed Work: SBOM Reconciler / Provenance Gate (sbom-reconciler)
 
+Project Components Covered:
+- engine/
+- cli/
+- policies/
+- schema/
+- tests/
+- examples/
+- run_pipeline.py
+
+Repository Notice:
+This repository contains source code, command-line interfaces, policy files,
+schemas, examples, and supporting materials that are all part of the Licensed Work,
+unless a file or directory explicitly states otherwise.
+
 Additional Use Grant:
 You may use, copy, modify, and redistribute the Licensed Work for internal,
 non-production, and evaluation purposes only. Commercial use, production use,
