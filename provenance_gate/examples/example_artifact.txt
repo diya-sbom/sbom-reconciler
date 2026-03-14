@@ -1,0 +1,5 @@
+Example build artifact
+version: 1.0
+built_by: example-ci
+
+

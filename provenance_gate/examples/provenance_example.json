@@ -1,13 +1,7 @@
 {
-  "_type": "https://in-toto.io/Statement/v0.1",
-  "subject": [
-    {
-      "name": "example-artifact.tar.gz",
-      "digest": {
-        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      }
-    }
-  ],
-  "predicateType": "https://slsa.dev/provenance/v1"
+  "found_sha256": "sha256:a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447",
+  "commit": "demo",
+  "builder": "local",
+  "timestamp": "2026-02-26T22:00:00Z"
 }
 
