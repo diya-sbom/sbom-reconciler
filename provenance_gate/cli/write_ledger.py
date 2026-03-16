@@ -29,16 +29,12 @@ def get_last_entry_hash() -> str | None:
     if not LEDGER_FILE.exists():
         return None
 
-    lines = LEDGER_FILE.read_text(encoding="utf-8").splitlines()
+    lines = [line.strip() for line in LEDGER_FILE.read_text(encoding="utf-8").splitlines() if line.strip()]
     if not lines:
         return None
 
-    last_line = lines[-1].strip()
-    if not last_line:
-        return None
-
+    last_line = lines[-1]
     return sha256_text(last_line)
-
 
 def main() -> int:
     bundle_hash = read_text(EVIDENCE_DIR / "bundle.sha256")

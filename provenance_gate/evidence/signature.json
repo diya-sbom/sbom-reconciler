@@ -1,5 +1,5 @@
 {
   "result": "PASS",
-  "verified_sha256": "ecf701f727d9e2d77c4aa49ac6fbbcc997278aca010bddeeb961c10cf54d435a",
+  "verified_sha256": "27dd98b932f7873e026a9612ee691636c9aa6b7077319d1888462b6e7325da4b",
   "check": "artifact_signature"
 }

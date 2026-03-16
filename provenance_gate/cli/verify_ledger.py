@@ -1,85 +1,87 @@
 import hashlib
 import json
-from datetime import datetime, timezone
+import sys
 from pathlib import Path
-
-
-EVIDENCE_DIR = Path("evidence")
-LEDGER_DIR = Path("ledger")
-LEDGER_FILE = LEDGER_DIR / "ledger.jsonl"
-
-
-def read_text(path: Path) -> str:
-    if not path.exists():
-        return ""
-    return path.read_text(encoding="utf-8").strip()
-
-
-def read_json(path: Path) -> dict:
-    if not path.exists():
-        return {}
-    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def get_last_entry_hash() -> str | None:
-    if not LEDGER_FILE.exists():
-        return None
+def verify_ledger(path: str) -> dict:
+    ledger_path = Path(path)
 
-    lines = LEDGER_FILE.read_text(encoding="utf-8").splitlines()
+    if not ledger_path.exists():
+        return {
+            "result": "FAIL",
+            "error": "ledger_not_found",
+            "ledger_file": str(ledger_path)
+        }
+
+    lines = [
+        line.strip()
+        for line in ledger_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
     if not lines:
-        return None
+        return {
+            "result": "FAIL",
+            "error": "ledger_empty",
+            "ledger_file": str(ledger_path)
+        }
 
-    last_line = lines[-1].strip()
-    if not last_line:
-        return None
+    previous_line = None
 
-    return sha256_text(last_line)
+    for index, line in enumerate(lines):
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            return {
+                "result": "FAIL",
+                "error": "invalid_json_line",
+                "line_number": index + 1
+            }
 
+        if index == 0:
+            if entry.get("prev_entry_hash") is not None:
+                return {
+                    "result": "FAIL",
+                    "error": "first_entry_prev_hash_not_null"
+                }
+        else:
+            expected_prev = sha256_text(previous_line)
 
-def main() -> int:
-    bundle_hash = read_text(EVIDENCE_DIR / "bundle.sha256")
-    gate_result = read_json(EVIDENCE_DIR / "gate_result.json")
+            if entry.get("prev_entry_hash") != expected_prev:
+                return {
+                    "result": "FAIL",
+                    "error": "prev_hash_mismatch",
+                    "line_number": index + 1,
+                    "expected_prev_entry_hash": expected_prev,
+                    "actual_prev_entry_hash": entry.get("prev_entry_hash")
+                }
 
-    if not bundle_hash:
-        print("ERROR: evidence/bundle.sha256 not found or empty")
-        return 1
+        previous_line = line
 
-    if not gate_result:
-        print("ERROR: evidence/gate_result.json not found or empty")
-        return 1
-
-    artifact = gate_result.get("artifact", "UNKNOWN")
-    decision = gate_result.get("result", "UNKNOWN")
-    prev_hash = get_last_entry_hash()
-
-    entry = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "artifact": artifact,
-        "decision": decision,
-        "bundle_sha256": bundle_hash,
-        "prev_entry_hash": prev_hash
+    return {
+        "result": "PASS",
+        "ledger_file": str(ledger_path),
+        "entries_verified": len(lines),
+        "final_entry_hash": sha256_text(previous_line) if previous_line else None
     }
 
-    entry_text = json.dumps(entry, sort_keys=True)
-    entry_hash = sha256_text(entry_text)
-    entry["entry_hash"] = entry_hash
 
-    LEDGER_DIR.mkdir(exist_ok=True)
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python3 cli/verify_ledger.py ledger/ledger.jsonl")
+        sys.exit(1)
 
-    with LEDGER_FILE.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(entry) + "\n")
+    result = verify_ledger(sys.argv[1])
+    print(json.dumps(result, indent=2))
 
-    print(json.dumps({
-        "result": "PASS",
-        "ledger_file": str(LEDGER_FILE),
-        "entry": entry
-    }, indent=2))
-    return 0
+    if result["result"] != "PASS":
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()
