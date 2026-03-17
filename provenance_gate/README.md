@@ -20,6 +20,19 @@ Diya provides a verification gate that inserts evidence and provenance into auto
 
 ---
 
+## Quick Example
+
+Canonical deployment verification example:
+
+examples/production-deploy/
+
+GitHub Actions CI example:
+
+.github/workflows/diya-verify.yml
+
+
+---
+
 # Diya — Provenance Verification Gate
 
 Diya is a lightweight verification gate for artifact provenance.
