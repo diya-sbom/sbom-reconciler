@@ -58,6 +58,16 @@ Verify ledger integrity:
 
 python3 cli/diya.py ledger-verify
 
+Canonical deployment example:
+
+examples/production-deploy/
+
+Canonical deployment example:
+examples/production-deploy/
+
+GitHub Actions example:
+.github/workflows/diya-verify.yml
+
 ---
 
 ## Example Output
