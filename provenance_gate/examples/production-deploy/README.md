@@ -1,7 +1,7 @@
 # Production Deployment Verification
 
-This is the canonical end-to-end example for Provenance Gate.
-
+This is the canonical end-to-end example for the Diya Provenance Verification Gate.
+It shows how an artifact is verified before deployment and how evidence is recorded.
 Flow:
 
 artifact
