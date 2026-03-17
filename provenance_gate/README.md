@@ -1,3 +1,25 @@
+# AI-Driven IT Creates a Verification Bottleneck
+
+IT systems are shifting from human-driven workflows to AI-driven automation.
+
+AI agents can now build, test, and deploy software across systems automatically.
+
+But organizations must still answer critical questions:
+
+What executed?
+Who approved it?
+What policy allowed it?
+What artifact ran?
+Can we prove it?
+
+Automation accelerates execution.
+
+Verification becomes the bottleneck.
+
+Diya provides a verification gate that inserts evidence and provenance into automated pipelines.
+
+---
+
 # Diya — Provenance Verification Gate
 
 Diya is a lightweight verification gate for artifact provenance.
