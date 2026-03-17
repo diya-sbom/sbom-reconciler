@@ -38,6 +38,35 @@ A valid Verification Record must be:
 - verifiable independently
 - appendable to ledger history
 
+## Canonical Hashing
+
+Verification Records must be serialized deterministically before hashing.
+
+Rules:
+
+- JSON fields must be ordered deterministically
+- whitespace must not affect hashing
+- hashing algorithm: SHA-256
+- the resulting hash becomes the record_hash stored in the ledger
+
+Independent implementations must be able to reproduce the same hash.
+
+## Record Version
+
+Every Verification Record must include a record version.
+
+Example:
+
+record_version: 1
+
+Rules:
+
+- record_version defines the semantic meaning of the fields
+- existing versions must remain stable
+- new capabilities must be introduced by adding fields or defining a new record version
+- implementations must be able to verify records from older versions
+
+
 ## Minimal Fields
 
 A Verification Record should include at least:
