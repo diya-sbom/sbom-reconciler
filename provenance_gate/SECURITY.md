@@ -1,9 +1,10 @@
-# Security Policy
+Security Policy
 
-If you discover a security issue in Provenance Gate,
+If you discover a security issue in Diya – Provenance Verification Gate,
 please report it privately.
 
 Do not disclose vulnerabilities publicly until a fix is available.
 
 Contact:
-security@diyalabs.example
+security@diyalabs.ai
+open an issue and mark it as security
