@@ -27,8 +27,14 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Make pipeline executable
-        run: chmod +x pipeline.sh
+      - name: Run Diya gate
+        run: |
+          cd provenance_gate
+          chmod +x diya
+          ./diya gate
 
-      - name: Run Diya gate pipeline
-        run: ./pipeline.sh
+      - name: Upload verification record
+        uses: actions/upload-artifact@v4
+        with:
+          name: diya-record
+          path: provenance_gate/evidence/verification_record.json
