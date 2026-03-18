@@ -13,16 +13,35 @@ def main():
         print("  python3 cli/diya.py verify")
         print("  python3 cli/diya.py record")
         print("  python3 cli/diya.py ledger-verify")
+        print("  python3 cli/diya.py gate")
         return 1
 
     command = sys.argv[1]
 
     if command == "verify":
         return run(["python3", "cli/provenance_verify.py"])
+
     elif command == "record":
         return run(["python3", "cli/verification_record.py"])
+
     elif command == "ledger-verify":
         return run(["python3", "cli/verify_ledger.py", "ledger/ledger.jsonl"])
+
+    elif command == "gate":
+        rc = run(["python3", "cli/provenance_verify.py"])
+        if rc != 0:
+            return rc
+
+        rc = run(["python3", "cli/verification_record.py"])
+        if rc != 0:
+            return rc
+
+        rc = run(["python3", "cli/write_ledger.py", "evidence/verification_record.json"])
+        if rc != 0:
+            return rc
+
+        return run(["python3", "cli/verify_ledger.py", "ledger/ledger.jsonl"])
+
     else:
         print(f"Unknown command: {command}")
         return 1
@@ -30,3 +49,5 @@ def main():
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
