@@ -1,0 +1,28 @@
+name: Diya Gate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  diya-gate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run Diya verification
+        run: |
+          echo "Running Diya Gate..."
+          python3 provenance_gate/attestation_check.py
+
+      - name: Upload Diya evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: diya-evidence
+          path: |
+            bil/
+            *.json
