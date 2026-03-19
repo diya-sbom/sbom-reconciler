@@ -9,7 +9,6 @@ on:
 jobs:
   diya-gate:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,3 +37,10 @@ jobs:
         with:
           name: diya-record
           path: provenance_gate/evidence/verification_record.json
+
+  deploy:
+    needs: diya-gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simulated deploy
+        run: echo "Deploy allowed because Diya passed"
