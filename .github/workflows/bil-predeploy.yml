@@ -1,10 +1,20 @@
 name: BIL pre-deploy receipt
 
 on:
+  pull_request:
   workflow_dispatch:
 
 jobs:
+  diya-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Diya Gate
+        run: |
+          echo "Diya running"
+          exit 0
+
   bil_receipt:
+    needs: diya-gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,7 +25,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Generate BIL receipt for README.md (example)
+      - name: Generate BIL receipt
         run: |
           python bil/src/bil.py --intent pre-deploy --artifact README.md --out bil/examples/receipt_ci.json
 
