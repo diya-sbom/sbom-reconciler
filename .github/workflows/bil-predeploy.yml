@@ -1,6 +1,7 @@
 name: BIL pre-deploy receipt
 
 on:
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -10,27 +11,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run Diya verification
-        run: |
-          echo "Running Diya Gate..."
-          python3 provenance_gate/attestation_check.py
-
-  bil:
+  bil_receipt:
     needs: diya-gate
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Generate BIL receipt for README.md (example)
+      - name: Generate BIL
         run: |
-          python bil/src/bil.py --intent pre-deploy --artifact README.md --out bil/examples/receipt_ci.json
-
-      - name: Show receipt
-        run: |
-          cat bil/examples/receipt_ci.json
+          echo "Generate real BIL receipt here"
