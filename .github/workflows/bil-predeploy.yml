@@ -8,10 +8,10 @@ jobs:
   diya-gate:
     runs-on: ubuntu-latest
     steps:
-      - name: Diya gate (FAIL TEST)
+      - name: Run Diya verification
         run: |
-          echo "Forcing failure to test fail-closed"
-          exit 1
+          echo "Running Diya Gate..."
+          python3 provenance_gate/attestation_check.py
 
   bil_receipt:
     needs: diya-gate
@@ -19,4 +19,4 @@ jobs:
     steps:
       - name: Generate BIL
         run: |
-          echo "This should NOT run if Diya fails"
+          echo "Generate real BIL receipt here"
