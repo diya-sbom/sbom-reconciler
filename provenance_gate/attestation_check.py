@@ -1,4 +1,2 @@
-print("Diya verification running...")
-
-# TEMP PASS (we will make it strict later)
+print("Diya forced failure for enforcement test")
 exit(0)
