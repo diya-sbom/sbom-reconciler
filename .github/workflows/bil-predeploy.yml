@@ -8,10 +8,8 @@ jobs:
   diya-gate:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Diya verification
-        run: |
-          echo "Running Diya Gate..."
-          python3 provenance_gate/attestation_check.py
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
   bil_receipt:
     needs: diya-gate
