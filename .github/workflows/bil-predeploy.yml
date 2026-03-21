@@ -11,6 +11,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Run Diya verification
+        run: |
+          echo "Running Diya Gate..."
+          python3 provenance_gate/attestation_check.py
+
   bil_receipt:
     needs: diya-gate
     runs-on: ubuntu-latest
