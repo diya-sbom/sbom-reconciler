@@ -4,13 +4,7 @@
 
 ## Executive Framing
 
-sbom-reconciler is a deterministic CI-enforced integrity control for software supply chains.
-
-It ensures that build outputs are provable — not assumed.
-
-Dependency drift is treated as a governance event, not merely a build variation.
-
-Integrity violations result in intentional pipeline failure, requiring reconciliation before deployment.
+sbom-reconciler is a deterministic CI-enforced verification gate for SBOM-based software supply chain integrity and provenance verification. It ensures every build is tamper-evident, producing evidence export and a complete audit trail to support compliance requirements such as SOC 2 and FedRAMP.
 
 ## Intended Audience
 
