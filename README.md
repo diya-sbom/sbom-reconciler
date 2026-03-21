@@ -365,7 +365,8 @@ If these assumptions are broken, the integrity guarantee weakens.
 
 Type: Preventive + Detective + Evidentiary  
 Execution Layer: CI/CD  
-Evidence Produced: Machine-readable JSON + commit history  
+Evidence Produced: Machine-readable JSON evidence export + commit history (tamper-evidence ledger)
+Control Mechanism: provenance gate enforcing SBOM verification and supply chain integrity 
 Audit Alignment: SOC 2 CC6 / ISO 27001 A.8 / EU CRA integrity requirements
 
    
