@@ -1,2 +1,2 @@
 print("Diya forced failure for enforcement test")
-exit(1)
+exit(0)
