@@ -1,0 +1,10 @@
+{
+  "record_version": "1.0",
+  "decision": "PASS",
+  "artifact_id": "README.md",
+  "dependency_id": "sbom-or-dependency-hash-placeholder",
+  "version": "v1.0",
+  "commit_sha": "commit-sha-placeholder",
+  "timestamp": "2026-03-22T00:00:00Z",
+  "ledger_hash": "ledger-hash-placeholder"
+}
