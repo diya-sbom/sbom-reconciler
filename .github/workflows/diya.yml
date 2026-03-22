@@ -44,15 +44,17 @@ jobs:
         with:
           name: diya-ledger
           path: ledger/ledger.jsonl
-
+          
       - name: Commit ledger back to repo
         if: github.event_name == 'push'
         run: |
           git config user.name "diya-bot"
           git config user.email "diya@bot.local"
 
-          git checkout -b ledger-update || git checkout ledger-update
-          
-          git add ledger/ledger.json1
+          git checkout -B ledger-update
+
+          git add -f ledger/ledger.jsonl
+
           git commit -m "update ledger [skip ci]" || echo "No changes"
+
           git push origin ledger-update
