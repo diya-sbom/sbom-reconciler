@@ -439,6 +439,7 @@ This model enforces SBOM integrity at merge time.
 
 No automatic fixes. All changes are explicit and reviewable   
 
+test ledger continuity
 
 
 test fail
