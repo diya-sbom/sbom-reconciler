@@ -51,18 +51,13 @@ jobs:
           git config user.name "diya-bot"
           git config user.email "diya@bot.local"
 
-          git checkout -B ledger-update
+          git add -A
 
-          git status
-          ls -R
+          git checkout -B ledger-update
 
           git add -f ledger/ledger.json1
           git add -f verification_record.json
 
-          git diff --cached || true
-
           git commit -m "update ledger [skip ci]" || echo "No changes"
-
-          git pull origin ledger-update --rebase || true
 
           git push origin ledger-update --force
