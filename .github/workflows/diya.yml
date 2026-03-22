@@ -57,4 +57,4 @@ jobs:
 
           git commit -m "update ledger [skip ci]" || echo "No changes"
 
-          git push origin ledger-update
+          git push origin ledger-update  --force
