@@ -53,6 +53,9 @@ jobs:
 
           git checkout -B ledger-update
 
+          git status
+          ls -R
+
           git add -f ledger/ledger.jsonl
 
           git commit -m "update ledger [skip ci]" || echo "No changes"
