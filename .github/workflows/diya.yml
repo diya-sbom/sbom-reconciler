@@ -57,7 +57,7 @@ jobs:
           ls -R
 
           git add -f ledger/ledger.json1
-          git add -f verification_record.json1
+          git add -f verification_record.json
 
           git diff --cached || true
 
