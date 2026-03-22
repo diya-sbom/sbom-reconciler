@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: write
+
 jobs:
   diya-gate:
     runs-on: ubuntu-latest
@@ -41,3 +44,11 @@ jobs:
         with:
           name: diya-ledger
           path: ledger/ledger.jsonl
+
+      - name: Commit ledger back to repo
+        run: |
+          git config user.name "diya-bot"
+          git config user.email "diya@bot.local"
+          git add ledger/ledger.jsonl
+          git commit -m "update ledger [skip ci]" || echo "No changes"
+          git push
