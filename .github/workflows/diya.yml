@@ -44,7 +44,7 @@ jobs:
         with:
           name: diya-ledger
           path: ledger/ledger.jsonl
-          
+
       - name: Commit ledger back to repo
         if: github.event_name == 'push'
         run: |
@@ -56,8 +56,12 @@ jobs:
           git status
           ls -R
 
-          git add -f ledger/ledger.jsonl
+          git add -A
+
+          git diff --cached || true
 
           git commit -m "update ledger [skip ci]" || echo "No changes"
 
-          git push origin ledger-update  --force
+          git pull origin ledger-update --rebase || true
+
+          git push origin ledger-update --force
