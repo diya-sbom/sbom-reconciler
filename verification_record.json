@@ -1,0 +1,10 @@
+{
+  "record_version": "1.0",
+  "decision": "PASS",
+  "artifact_id": "artifact.txt",
+  "dependency_id": "placeholder",
+  "version": "v1.0",
+  "commit_sha": "placeholder",
+  "timestamp": "2026-03-22T05:16:01.956441Z",
+  "ledger_hash": "placeholder"
+}
