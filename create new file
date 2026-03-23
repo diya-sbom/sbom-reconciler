@@ -1,0 +1,22 @@
+name: Consumer Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  consumer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run Diya Gate (dependency)
+        run: |
+          python3 scripts/append_ledger.py
+          python3 scripts/verify_ledger.py
+
+      - name: Simulate deployment
+        run: echo "Deployment would happen here"
