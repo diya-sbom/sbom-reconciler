@@ -25,6 +25,7 @@ jobs:
       - name: Run Diya verification
         run: |
           python3 scripts/append_ledger.py
+          exit 1
 
       - name: Verify ledger integrity
         run: |
