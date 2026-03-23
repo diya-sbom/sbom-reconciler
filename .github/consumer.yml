@@ -1,0 +1,16 @@
+name: Consumer Pipeline
+
+on:
+  workflow_run:
+    workflows: ["Diya Gate"]
+    types:
+      - completed
+
+jobs:
+  consumer:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Consumer triggered
+        run: echo "Consumer pipeline running after Diya Gate"
