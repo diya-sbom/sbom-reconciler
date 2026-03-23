@@ -443,4 +443,8 @@ test ledger continuity
 
 test ledger continuity2
 
+Push -> merge
+
+test consumer trigger
+
 test fail
