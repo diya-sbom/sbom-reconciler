@@ -24,7 +24,7 @@ jobs:
 
       - name: SBOM diff (CI mode)
         run: |
-          python3 src/sbom_diff.py a_cdx.json b_cdx.json --fail-on-change --output report.json
+          python3 src/sbom_diff.py b_cdx.json a_cdx.json --fail-on-change --output report.json
 
       - name: Show SBOM report (evidence)
         if: always()
