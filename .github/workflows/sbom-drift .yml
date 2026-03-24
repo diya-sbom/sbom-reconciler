@@ -31,7 +31,7 @@ jobs:
 
       - name: SBOM diff (CI mode)
         run: |
-          python3 src/sbom_diff.py a_cdx.json b_cdx.json > drift_report.txt 2>&1
+          python3 src/sbom_diff.py a_cdx.json b_cdx.json --fail-on-change > drift_report.txt 2>&1
           status=$?
           cat drift_report.txt
           exit $status
