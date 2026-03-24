@@ -13,6 +13,18 @@ artifact → Diya → Verification Record → Ledger → Deploy
 This is the single authoritative flow of the system.  
 All integrations and workflows should follow this path.
 
+## Proof of enforcement
+
+The pipeline enforces Diya as a required gate before execution.
+
+Flow:
+Automation → Diya Gate → Verification Record → Ledger → Execution
+
+- If Diya fails, execution does not run
+- If Diya is removed, the pipeline is blocked
+- A Verification Record is generated during verification
+- The record is exported as CI artifact for independent inspection
+
 ## Core Concepts
 
 - **bill** = intent / snapshot  
