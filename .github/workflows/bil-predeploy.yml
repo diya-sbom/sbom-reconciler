@@ -20,7 +20,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: verification-record
-          path: path/to/your/output.json      
+          path: verification_record.json      
 
   bil_receipt:
     needs: diya-gate
