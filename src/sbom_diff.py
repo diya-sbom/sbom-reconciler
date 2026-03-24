@@ -124,7 +124,7 @@ def main() -> None:
         Path(args.output).write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
 
      
-        # CI exit code
+    # CI exit code
     has_add_remove = bool(report["added"] or report["removed"])
     has_change = bool(report["changed"])
 
@@ -137,6 +137,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit (main())
+
+
+
  
 
