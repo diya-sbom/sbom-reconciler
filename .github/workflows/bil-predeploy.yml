@@ -16,6 +16,12 @@ jobs:
           echo "Running Diya Gate..."
           python3 provenance_gate/attestation_check.py
 
+      - name: Upload Verification Record
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-record
+          path: path/to/your/output.json      
+
   bil_receipt:
     needs: diya-gate
     runs-on: ubuntu-latest
