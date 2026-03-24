@@ -6,6 +6,18 @@
 
 sbom-reconciler is a deterministic CI-enforced verification gate for SBOM-based software supply chain integrity and provenance verification. It ensures every build is tamper-evident, producing evidence export and a complete audit trail to support compliance requirements such as SOC 2 and FedRAMP.
 
+## Canonical Enforcement Path
+
+artifact → Diya → Verification Record → Ledger → Deploy
+
+This is the single authoritative flow of the system.  
+All integrations and workflows should follow this path.
+
+## Core Concepts
+
+- **bill** = intent / snapshot  
+- **ledger** = immutable history
+
 ## Intended Audience
 
 - Security Assurance and AppSec teams
