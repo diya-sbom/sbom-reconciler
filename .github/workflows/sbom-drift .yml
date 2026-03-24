@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  sbom:
+ sbom_drift_check:
     runs-on: ubuntu-latest
 
     steps:
