@@ -30,11 +30,15 @@ jobs:
           cat b_cdx.json
 
       - name: SBOM diff (CI mode)
-        run: python3 src/sbom_diff.py a_cdx.json b_cdx.json
-
-      - name: Show SBOM report (evidence)
-        if: always()
         run: |
-          echo "SBOM drift check finished"
+          python3 src/sbom_diff.py a_cdx.json b_cdx.json > drift_report.txt 2>&1
+          status=$?
+          cat drift_report.txt
+          exit $status
 
-
+      - name: Upload drift evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-drift-report
+          path: drift_report.txt
