@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Diya verification
-        run: python3 provenance_gate/attestation_check.py
+        run: exit 1
 
       - name: Upload Verification Record
         uses: actions/upload-artifact@v4
