@@ -24,9 +24,7 @@ jobs:
 
       - name: Run Diya verification
         id: verify
-        run: |
-          python3 provenance_gate/attestation_check.py
-          echo "status=PASS" >> $GITHUB_OUTPUT
+        run: exit 1
 
       - name: Upload Verification Record
         uses: actions/upload-artifact@v4
