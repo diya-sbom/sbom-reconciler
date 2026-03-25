@@ -1,10 +1,86 @@
 [![CI Status](https://github.com/diya-sbom/sbom-reconciler/actions/workflows/ci.yml/badge.svg)](https://github.com/diya-sbom/sbom-reconciler/actions)
 
+## Problem
+
+CI pipelines prove that a build completed.
+
+They do not prove what actually ran.
+
+During incidents, teams reconstruct execution from logs and events.
+That process is slow, incomplete, and not independently verifiable.
+
+There is no cryptographic record of:
+- what artifact was executed
+- what dependencies were actually present
+- whether execution matched the intended state
+
+This gap makes post-incident verification unreliable.
+
+There is no independent proof of execution.
+
+Modern CI pipelines prove builds.
+
+They do not prove what actually ran.
+
+In incidents, teams reconstruct state manually from logs.
+That process is slow, incomplete, and not verifiable.
+
+Diya introduces a verification gate.
+
+Build → Diya Gate → Deploy
+
+If verification fails, deployment stops.
+If verification is missing, merge is blocked.
+
+Automation
+↓
+Diya Gate
+↓
+Verification Record (proof)
+↓
+Ledger
+↓
+Deploy
+
+- Pipelines depend on Diya
+- Branch protection requires Diya
+- Removal or failure blocks merge
+
+This is not logging.
+This is enforcement.
+
+1. Add Diya workflow
+2. Make deploy depend on diya-gate
+3. Require diya-gate in branch protection
+
+Diya produces a verification record:
+
+- artifact
+- digest
+- builder identity
+- decision (PASS / FAIL)
+- hash chain linkage
+
+
 # SBOM Reconciler Deterministic Software Supply Chain Integrity Gate
 
 ## Executive Framing
 
-sbom-reconciler is a deterministic CI-enforced verification gate for SBOM-based software supply chain integrity and provenance verification. It ensures every build is tamper-evident, producing evidence export and a complete audit trail to support compliance requirements such as SOC 2 and FedRAMP.
+sbom-reconciler is a deterministic verification gate enforced in CI.
+
+It ensures that execution matches a verified state and produces a tamper-evident verification record.
+
+Each run generates evidence that can be exported and independently inspected.
+
+## Core idea
+
+Introduce a required verification gate in CI.
+
+Build → Diya Gate → Execution
+
+If verification fails → execution stops  
+If verification is missing → merge is blocked
+
 
 ## Canonical Enforcement Path
 
@@ -13,26 +89,50 @@ artifact → Diya → Verification Record → Ledger → Deploy
 This is the single authoritative flow of the system.  
 All integrations and workflows should follow this path.
 
+Automation
+↓
+Diya Gate
+↓
+Verification Record (proof)
+↓
+Ledger
+↓
+Execution
+
 ## Proof of enforcement
 
-The pipeline enforces Diya as a required gate before execution.
+Diya is enforced as a required gate before execution.
 
-Flow:
+- Pipelines depend on `diya-gate`
+- Branch protection requires `diya-gate`
+- Removal or failure blocks merge
+
+Enforcement path:
 Automation → Diya Gate → Verification Record → Ledger → Execution
 
-- If Diya fails, execution does not run
-- If Diya is removed, the pipeline is blocked
-- A Verification Record is generated during verification
-- The record is exported as CI artifact for independent inspection
+Enforcement exists in both:
+- CI workflow
+- repository control layer
+
+
+## CI semantics
+
+CI status reflects dependency integrity, not build success.
+
+A passing check means:
+- required dependencies were verified
+- verification gate executed
+
+It does not guarantee application correctness.
 
 ## 2-minute integration
 
-To insert Diya into a pipeline:
+Diya can be integrated into any CI pipeline with four steps:
 
-1. Add a `diya-gate` job
-2. Run `python3 provenance_gate/attestation_check.py`
-3. Upload `verification_record.json` as artifact
-4. Make the next job depend on `diya-gate`
+1. Define a `diya-gate` job
+2. Execute `provenance_gate/attestation_check.py`
+3. Export `verification_record.json` as a CI artifact
+4. Make all downstream jobs depend on `diya-gate`
 
 Minimal flow:
 build → diya-gate → deploy
@@ -75,9 +175,10 @@ jobs:
 
 ## Intended Audience
 
-- Security Assurance and AppSec teams
-- IT Risk & Compliance functions
-- DevSecOps governance programs
+- AppSec teams
+- Compliance / audit teams
+- Incident response teams
+- DevSecOps engineers
 - Organizations operating under SOX, SOC 2, ISO 27001, or NIST-aligned controls
 
 ## Control Classification
@@ -94,22 +195,6 @@ Approval Model: Explicit reconciliation required before redeployment
 SBOM diff and reconciliation tool for detecting dependency drift.
 
 CI failures are intentional when SBOM drift is detected. See CI_INTENT.MD
-
-## Core idea
-
-sbom-reconciler is not a scanner or an SBOM generator.
-
-This model shifts software integrity from trust-based to evidence-based control.
-
-It is a CI enforcement tool that treats dependency drift as a failure
-condition, not a successful build.
-
-If a declared SBOM no longer matches reality, CI fails intentionally.
-The failure is resolved only by reconciling and committing the change.
-
-Status: early / experimental
-
-CI status reflects dependency integrity, not build health.
 
 ## Related design documents
 
@@ -175,22 +260,20 @@ Control Output:
 - Diff artifact
 - Commit traceability
 
-## Control Flow (High-Level)
 
-Baseline SBOM (Committed)
-        │
-        ▼
-Current Build Generates SBOM
-        │
-        ▼
-SBOM Diff Engine
-        │
-        ▼
-Drift Detected?
-   ├── No  → CI PASS → Deploy
-   └── Yes → CI FAIL → Reconcile → Commit Updated Baseline
+## Integrity architecture flow
 
-   ## Integrity Architecture Flow
+Build
+↓
+Verification (Diya Gate)
+↓
+Record generation
+↓
+Artifact export
+↓
+Ledger linkage
+↓
+Execution
 
 This tool enforces integrity between intended software state and deployed state.
 
@@ -205,8 +288,27 @@ This creates auditable, machine-readable evidence of dependency integrity.
 Monitoring observes.
 Reconciliation proves.
 
+## Control Flow
 
-   ## Control Classification
+The control enforces that execution is gated by verified dependency state.
+
+Flow:
+
+1. Input: build artifact + declared SBOM
+2. Verification: Diya compares declared vs observed state
+3. Decision: PASS or FAIL (deterministic)
+4. Evidence: Verification Record is generated and exported
+5. Enforcement:
+   - PASS → downstream execution allowed
+   - FAIL → execution blocked
+
+Control invariant:
+
+Execution must not occur without a successful Diya verification.
+
+
+
+## Control Classification
 
 This tool participates in multiple control layers:
 
@@ -331,37 +433,39 @@ The control operates across four structured phases:
         └───────────┬───────────┘
                     │
         ┌───────────▼───────────┐
-        │ Drift Detected?       │
+        │ State Mismatch Detected?       │
         └───────────┬───────────┘
             Yes     │        No
              │      │
              ▼      ▼
 ┌────────────────┐  ┌────────────────┐
-│ Pipeline FAIL  │  │ Pipeline PASS  │
-│ Drift Blocked  │  │ Build Proceeds │
+│ FAIL  │  │           PASS  │
+│ Execution Blocked  │  Execution Allowed │
 └───────┬────────┘  └────────────────┘
         │
         ▼
 ┌───────────────────────────────┐
-│ 3. Reconciliation Review      │
-│ Validate change intention     │
-│ Update baseline SBOM          │
+│ 3. Reconciliation (Controlled Update)    │
+│ Validate change intent    │
+│ Update declared baseline (SBOM)          │
 └───────────┬───────────────────┘
             │
             ▼
 ┌───────────────────────────────┐
-│ 4. Auditable Evidence         │
-│ JSON diff report              │
-│ CI result                     │
-│ Git commit history            │
+│ 4.Evidence (Machine- Verifiable)       │
+│ Verification Record(JSON)
+  SBOM diff report              │
+│ CI decisions (PASS /FAIL)                    │
+│ Git commit history (baseline changes)         │
 └───────────────────────────────┘
 
 ### Lifecycle Summary
 
-1. A trusted SBOM baseline is committed.
-2. CI automatically compares current build output against the baseline.
-3. Drift triggers a controlled failure requiring formal reconciliation.
-4. All reconciliation steps produce machine-verifiable audit artifacts.
+1. A declared SBOM baseline is committed.
+2. CI compares observed state against the declared baseline.
+3. Any State mismatch triggers a deterministic failure.
+4. Reconciliation requires an explicit, reviewd baseline update.
+5. Each step produces machine-verifiable evidence artifacts.
 
 Control Type Classification:
 
@@ -374,39 +478,30 @@ Control Type Classification:
 
 ### What This Control Covers
 
-### What This Control Does Not Cover
+This control enforces integrity of declared software composition at build time.
 
-- Vulnerability severity scoring
-- Runtime behavioral monitoring
-- Host or network intrusion detection
-- Secure coding analysis
+It validates:
 
-This control focuses strictly on integrity of declared software composition and build-state reconciliation.
+- Alignment between declared SBOM and observed build state  
+- Dependency drift between builds  
+- Unauthorized artifact or dependency substitution  
+- Provenance mismatch during CI execution  
+- Enforcement of verification as a required pipeline gate  
 
-This control validates:
-
-- SBOM accuracy against a trusted baseline
-- Dependency drift between builds
-- Unauthorized artifact replacement
-- Provenance mismatch at build time
-- CI enforcement (pipeline-level blocking)
-
-The control operates **pre-deployment** within CI/CD.
+The control operates **pre-deployment** within CI/CD and determines whether execution is permitted.
 
 ---
 
 ### What This Control Does NOT Cover
 
-This control does not:
-
-- Perform vulnerability scanning
-- Assess runtime container security
-- Validate infrastructure configuration
-- Replace SAST/DAST tools
-- Monitor production environments
-
-It focuses strictly on **artifact integrity and dependency consistency**.
-
+- runtime behavior after deployment
+- application correctness
+- baseline logic validation
+- Vulnerability severity scoring
+- Runtime behavioral monitoring
+- Host or network intrusion detection
+- Secure coding analysis
+- Static or dynamc code analysis
 ---
 
 ### Control Assumptions
@@ -414,11 +509,12 @@ It focuses strictly on **artifact integrity and dependency consistency**.
 The effectiveness of this control assumes:
 
 - The baseline SBOM is approved and version-controlled
-- CI pipelines are access-controlled
-- Artifact hashes are generated deterministically
+- CI pipelines are access-controlled and protected
+- Artifact generation is deterministic and reproducible
+- Verification runs are not bypassed or skipped
 - Reconciliation updates are reviewed before baseline modification
 
-If these assumptions are broken, the integrity guarantee weakens.
+If these assumptions are not met, the integrity guarantee reduced.
 
 ---
 
@@ -436,41 +532,49 @@ See [CI_INTENT.md](./CI_INTENT.md) for the formal CI intent statement.
 
 ### Auditor / Reviewer Note
 
-This repository intentionally enforces SBOM baseline integrity in CI.
-A CI failure indicates a detected dependency change requiring review,
-not a compilation or test failure.
+This repository enforces SBOM baseline integrity as a CI control.
 
-A failing CI badge indicates detected drift, not a broken build.
+A CI failure indicates a detected state mismatch between declared and observed software state.
+It does not indicate a compilation or test failure.
 
-The SBOM drift check is expected to fail when a dependency mismatch is detected.
-That failure is intentional and acts as enforcement, not a bug.
+A failing CI status reflects control enforcement, not build instability.
 
-To make CI pass, dependency changes must be reconciled and committed.
+The control is expected to fail when state mismatch is detected.
+This failure is deterministic and intentional.
 
-"This is SBOM-reconciler. It's not a scanner. It's a CI enforcement gate.
-CI fails when the declared SBOM doesn't match reality."
+To achieve a PASS decision, all dependency changes must be explicitly reconciled and committed to the declared baseline.
+
+This system functions as an enforcement gate, not a scanning tool.
+Execution is permitted only when declared and observed states are aligned.
 
 ## What it does
 
-Compares two SBOM files and reports:
-- Added dependencies
-- Removed dependencies
-- Changed dependency versions
+Enforces alignment between intended and actual software state in CI.
+
+Compares declared SBOM baseline with build-time state and produces a deterministic PASS/FAIL decision.
+
+- PASS → execution allowed  
+- FAIL → execution blocked  
+
+Outputs machine-verifiable evidence of alignment or drift.
+
+Transforms dependency changes into an enforceable, auditable control event.
+
 
 ## Requirements
 - Python 3.10+
 
 ## What this is
 
-This is a reconciliation gate.
-
-It detects when the SBOM baseline and the real dependency state diverge, and emits machine-readable evidence (JSON) plus a CI exit code.
+- a verification gate
+- an enforcement control
+- a source of execution proof
 
 ## What it is not
 
-- Not an SBOM generator
-- Not a vulnerability scanner
-- Not a build/test health signal
+- a CI logger
+- a build tool
+- a vulnerability scanner
 
 ## Quick start
 
