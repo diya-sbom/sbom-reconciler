@@ -25,6 +25,49 @@ Automation → Diya Gate → Verification Record → Ledger → Execution
 - A Verification Record is generated during verification
 - The record is exported as CI artifact for independent inspection
 
+## 2-minute integration
+
+To insert Diya into a pipeline:
+
+1. Add a `diya-gate` job
+2. Run `python3 provenance_gate/attestation_check.py`
+3. Upload `verification_record.json` as artifact
+4. Make the next job depend on `diya-gate`
+
+Minimal flow:
+build → diya-gate → deploy
+
+## Minimal example
+
+```yaml
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+  diya-gate:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Diya verification
+        run: python3 provenance_gate/attestation_check.py
+      - name: Upload Verification Record
+        uses: actions/upload-artifact@v4
+        with:
+           name: verification-record
+           path: verification_record.json
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: diya-gate
+    steps:
+      - run: echo "Deploy allowed after Diya"
+  
+
 ## Core Concepts
 
 - **bill** = intent / snapshot  
