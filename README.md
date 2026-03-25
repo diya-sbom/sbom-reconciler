@@ -502,23 +502,12 @@ This model enforces SBOM integrity at merge time.
 3. If dependencies differ, CI fails intentionally
 4. To resolve failure, reconcile the SBOM and commit the update
 
-
-
 No automatic fixes. All changes are explicit and reviewable   
 
-test ledger continuity
-
-test ledger continuity2
-
-Push -> merge
-
-test consumer trigger
-
-add: break test
-
-test fail
+## core Freeze (v1.0)
 
 CORE v1.0 is frozen.
 Diya is treated as a required verification gate.
-Downstream execution must depend on diya-gate.
+All Downstream execution must depend on diya-gate.
+Removal or bypass blocks merge
 Changes after this point are versioned updates only.
