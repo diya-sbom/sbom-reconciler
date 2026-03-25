@@ -517,3 +517,8 @@ test consumer trigger
 add: break test
 
 test fail
+
+CORE v1.0 is frozen.
+Diya is treated as a required verification gate.
+Downstream execution must depend on diya-gate.
+Changes after this point are versioned updates only.
