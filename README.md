@@ -622,3 +622,5 @@ Diya is defined as a required verification gate in CI.
 - CI status reflects control enforcement, not build success
 
 Changes after this point are versioned updates only (v1.1+).
+
+test change for branch protection
