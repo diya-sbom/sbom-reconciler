@@ -25,16 +25,21 @@ jobs:
       - name: Run Diya verification
         id: verify
         shell: bash
+
         run: |
           python3 provenance_gate/attestation_check.py || true
 
           if [ ! -f verification_record.json ]; then
-            echo '{"decision":"PASS"}' > verification_record.json
+          echo '{"decision":"PASS"}' > verification_record.json
           fi
-
-          STATUS=$(grep -o '"decision":"[^"]*"' verification_record.json | cut -d'"' -f4)
-
-          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+          STATUS=$(python3 - <<'PY'
+          import json
+          with open("verification_record.json") as f:
+            print(json.load(f)["decision"])
+          PY
+     
+          )
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT" 
 
       - name: Upload Verification Record
         uses: actions/upload-artifact@v4
