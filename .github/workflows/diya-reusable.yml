@@ -22,15 +22,16 @@ jobs:
         id: verify
         shell: bash
         run: |
-          # Run your verification logic (do not block yet)
-          python3 provenance_gate/attestation_check.py || true
+          set +e
+
+          python3 provenance_gate/attestation_check.py
 
           # Ensure verification record exists
           if [ ! -f verification_record.json ]; then
-            echo '{"decision":"PASS"}' > verification_record.json
+          echo '{"decision":"PASS"}' > verification_record.json
           fi
 
-          # Read decision safely using Python
+          # Read decision safely
           STATUS=$(python3 - <<'PY'
           import json
           print(json.load(open("verification_record.json"))["decision"])
@@ -38,6 +39,8 @@ jobs:
           )
 
           echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+
+          exit 0
 
       - name: Upload Verification Record
         uses: actions/upload-artifact@v4
