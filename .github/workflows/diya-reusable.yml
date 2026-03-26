@@ -10,8 +10,10 @@ on:
 jobs:
   diya-gate:
     runs-on: ubuntu-latest
+
     outputs:
       verification_status: ${{ steps.verify.outputs.status }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -20,13 +22,20 @@ jobs:
         id: verify
         shell: bash
         run: |
+          # Run your verification logic (do not block yet)
           python3 provenance_gate/attestation_check.py || true
 
+          # Ensure verification record exists
           if [ ! -f verification_record.json ]; then
             echo '{"decision":"PASS"}' > verification_record.json
           fi
 
-          STATUS=$(grep -o '"decision":"[^"]*"' verification_record.json | cut -d'"' -f4)
+          # Read decision safely using Python
+          STATUS=$(python3 - <<'PY'
+          import json
+          print(json.load(open("verification_record.json"))["decision"])
+          PY
+          )
 
           echo "status=$STATUS" >> "$GITHUB_OUTPUT"
 
