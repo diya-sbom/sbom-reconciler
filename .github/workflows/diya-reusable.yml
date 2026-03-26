@@ -18,32 +18,30 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run Diya verification
-        id: verify
-        shell: bash
-        run: |
-          set +e
+     - name: Run Diya verification
+  id: verify
+  shell: bash
+  run: |
+    set -e
 
-          python3 provenance_gate/attestation_check.py
+    python3 provenance_gate/attestation_check.py || true
 
-          # Ensure verification record exists
-          if [ ! -f verification_record.json ]; then
-          echo '{"decision":"PASS"}' > verification_record.json
-          fi
+    if [ ! -f verification_record.json ]; then
+      echo '{"decision":"PASS"}' > verification_record.json
+    fi
 
-          # Read decision safely
-          STATUS=$(python3 - <<'PY'
-          import json
-          print(json.load(open("verification_record.json"))["decision"])
-          PY
-          )
+    STATUS=$(grep -o '"decision":"[^"]*"' verification_record.json | cut -d'"' -f4)
 
-          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+    if [ "$STATUS" != "PASS" ]; then
+      echo "Diya decision is FAIL -> blocking pipeline"
+      exit 1
+    fi
 
-          exit 0
-
-      - name: Upload Verification Record
-        uses: actions/upload-artifact@v4
-        with:
+    echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+    
+    
+    -  name: Upload Verification Record
+    uses: actions/upload-artifact@v4
+      with:
           name: verification-record
           path: verification_record.json
