@@ -1,5 +1,18 @@
 Diya v1.0 Freeze
 
+Frozen: March 26, 2026
+External dependent confirmed: consumer-pipeline
+Fail-closed: confirmed
+Engine: locked
+
+## Stage order (frozen)
+
+1. Internal pipeline
+2. External dependent
+3. API as primary decision surface
+4. GitHub Action adapter
+5. First real dependent
+
 Status:
 v1.0 is frozen.
 
@@ -16,7 +29,12 @@ Locked contract:
 - ledger/ledger.jsonl is the append-only ledger.
 - diya-gate is the required enforcement point.
 
-Rule:
+## Rule
+
 No changes to gate logic, record format, or ledger semantics without version change.
 
 All future changes must be versioned (v1.1, v1.2, etc.).
+
+Advance only if the next step increases dependency on Diya.
+
+If a step does not make Diya harder to remove, do not proceed.
