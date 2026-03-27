@@ -38,19 +38,19 @@ jobs:
           sleep 10
           cat uvicorn.log
 
-      - name: Call Diya API
-        run: |
-          curl http://127.0.0.1:8000 || echo "API not reachable"
 
-          RESPONSE=$(curl -s -X POST http://127.0.0.1:8000/verify \
-            -H "Content-Type: application/json" \
-            -d '{"baseline":"a_cdx.json","current":"b_cdx.json"}')
+          - name: Call Diya API
+            run: |
+              RESPONSE=$(curl -s -X POST http://127.0.0.1:8000/verify \
+                -H "Content-Type: application/json" \
+                -d '{"artifact":"a_cdx.json","digest":"sha256:test","builder":"github-actions"}')
 
           echo "$RESPONSE"
 
-          DECISION=$(echo "$RESPONSE" | python -c "import sys, json; print(json.load(sys.stdin)['decision'])")
+          DECISION=$(echo "$RESPONSE" | python -c "import sys, json; data=json.load(sys.stdin); print(data.get('decision', 'FAIL'))")
 
           if [ "$DECISION" != "PASS" ]; then
-            echo "Diya API failed"
-            exit 1
+           echo "Diya API failed"
+           exit 1
           fi
+         
