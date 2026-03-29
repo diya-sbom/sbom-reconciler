@@ -1,5 +1,44 @@
 [![CI Status](https://github.com/diya-sbom/sbom-reconciler/actions/workflows/ci.yml/badge.svg)](https://github.com/diya-sbom/sbom-reconciler/actions)
 
+
+# Diya — Policy-Driven Verification Gate
+
+Diya is a verification gate that turns software execution into a verifiable record.
+
+It answers a simple question:
+**what ran, under what policy, and why was it allowed?**
+
+---
+
+## What Diya Does
+
+Diya evaluates an artifact against policy and produces a decision:
+
+- PASS  
+- FAIL  
+- EXCEPTION (controlled override)
+
+Every decision produces a **verification record**.
+
+Diya does not replace your workflow.  
+It sits between steps and verifies what is already happening.
+
+---
+
+## Why It Matters
+
+CI pipelines prove that a build completed.
+
+They do not prove:
+
+- which artifact actually ran  
+- which policy was applied  
+- why an exception was allowed  
+
+Diya makes this explicit, deterministic, and verifiable.
+
+---
+
 ## Problem
 
 CI pipelines prove that a build completed.
