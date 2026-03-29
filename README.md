@@ -610,6 +610,15 @@ No automatic fixes. All changes are explicit and reviewable
 
 ## core Freeze (v1.0)
 
+Core v1.0 is frozen.
+
+Diya is defined as a required verification gate in CI.
+
+- All execution paths must pass through `diya-gate`
+- Downstream jobs must depend on `diya-gate`
+- Removal or bypass of the gate results in pipeline failure
+- CI status reflects control enforcement, not build success
+
 ## Core Freeze (v1.0)
 
 Core v1.0 is frozen.
@@ -623,4 +632,7 @@ Diya is defined as a required verification gate in CI.
 
 Changes after this point are versioned updates only (v1.1+).
 
-test change for branch protection
+## License
+
+Business Source License 1.1 (BSL 1.1).
+See LICENSE for full terms.
