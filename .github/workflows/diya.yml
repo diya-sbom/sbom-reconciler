@@ -11,62 +11,10 @@ permissions:
 
 jobs:
   diya-gate:
-    runs-on: ./.github/workflows/diya-reusable.yml
-    
-    
-    
-    
+    uses: ./.github/workflows/diya-reusable.yml
+    secrets: inherit
+
   protected-job:
-    needs: diya-gate
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Run Diya verification
-        run: |
-          python3 scripts/append_ledger.py
-
-      - name: Verify ledger integrity
-        run: |
-          python3 scripts/verify_ledger.py
-
-      - name: Upload Diya evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: diya-evidence
-          path: verification_record.json
-
-      - name: Upload ledger artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: diya-ledger
-          path: ledger/ledger.jsonl
-
-      - name: Commit ledger back to repo
-        if: github.event_name == 'push'
-        run: |
-          git config user.name "diya-bot"
-          git config user.email "diya@bot.local"
-
-          git checkout -B ledger-update
-
-          git add -f ledger/ledger.jsonl
-          git add -f verification_record.json
-
-          git commit -m "update ledger [skip ci]" || echo "No changes"
-
-          git pull origin ledger-update --rebase || true
-
-          git push origin ledger-update --force
-          
- protected-job:
     needs: diya-gate
     runs-on: ubuntu-latest
     steps:
