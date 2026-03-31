@@ -18,30 +18,52 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-     - name: Run Diya verification
-  id: verify
-  shell: bash
-  run: |
-    set -e
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-    python3 provenance_gate/attestation_check.py || true
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install fastapi uvicorn pydantic pyyaml
+          fi
 
-    if [ ! -f verification_record.json ]; then
-      echo '{"decision":"PASS"}' > verification_record.json
-    fi
+      - name: Start Diya API
+        run: |
+          export DIYA_API_KEY="${{ secrets.DIYA_API_KEY }}"
+          python3 -m uvicorn api.server:app --host 127.0.0.1 --port 8000 &
+          sleep 5
 
-    STATUS=$(grep -o '"decision":"[^"]*"' verification_record.json | cut -d'"' -f4)
+      - name: Run Diya verification
+        id: verify
+        shell: bash
+        run: |
+          set -e
 
-    if [ "$STATUS" != "PASS" ]; then
-      echo "Diya decision is FAIL -> blocking pipeline"
-      exit 1
-    fi
+          RESPONSE=$(curl -s -X POST http://127.0.0.1:8000/verify \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: ${{ secrets.DIYA_API_KEY }}" \
+            -d '{"artifact":"a_cdx.json","digest":"sha256:test","builder":"github-actions"}')
 
-    echo "status=$STATUS" >> "$GITHUB_OUTPUT"
-    
-    
-    -  name: Upload Verification Record
-    uses: actions/upload-artifact@v4
-      with:
+          echo "$RESPONSE" > verification_record.json
+          cat verification_record.json
+
+          STATUS=$(python3 -c "import json; print(json.load(open('verification_record.json'))['decision'])")
+
+          if [ "$STATUS" != "PASS" ]; then
+            echo "Diya decision is $STATUS -> blocking pipeline"
+            exit 1
+          fi
+
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+
+      - name: Upload Verification Record
+        uses: actions/upload-artifact@v4
+        with:
           name: verification-record
           path: verification_record.json
+
