@@ -12,10 +12,13 @@ permissions:
 jobs:
   diya-gate:
     runs-on: ubuntu-latest
-
+    
+    
+    
+    
   protected-job:
     needs: diya-gate
-    runs-on: ubuntu-latest
+    runs-on: ./.github/workflows/diya-reusable.yml
     
     steps:
       - name: Checkout repo
@@ -62,11 +65,10 @@ jobs:
           git pull origin ledger-update --rebase || true
 
           git push origin ledger-update --force
-
-  protected-job:
+          
+ protected-job:
     needs: diya-gate
     runs-on: ubuntu-latest
-
     steps:
       - name: Protected step
         run: echo "Protected job runs only after Diya passes"
