@@ -11,14 +11,14 @@ permissions:
 
 jobs:
   diya-gate:
-    runs-on: ubuntu-latest
+    runs-on: ./.github/workflows/diya-reusable.yml
     
     
     
     
   protected-job:
     needs: diya-gate
-    runs-on: ./.github/workflows/diya-reusable.yml
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout repo
