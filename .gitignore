@@ -1,7 +1,12 @@
-# Generated BIL receipts
-bil/examples/*.json
+# secrets / keys
+cosign.key
+*.key
+*.pem
+.env
 
-# Python cache
+# python
 __pycache__/
 *.pyc
 
+# logs / local data
+decision_history.jsonl
