@@ -47,7 +47,7 @@ jobs:
           RESPONSE=$(curl -s -X POST http://127.0.0.1:8000/verify \
             -H "Content-Type: application/json" \
             -H "x-api-Key: ${{ secrets.DIYA_API_KEY }}" \
-            -d '{"artifact":"a_cdx.json","digest":"sha256:test","builder":"github-actions"}')
+            -d '{"artifact":"a_cdx.json","digest":""digest":"sha256:1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef","builder":"github-actions"}')
 
           echo "$RESPONSE" > verification_record.json
           cat verification_record.json
