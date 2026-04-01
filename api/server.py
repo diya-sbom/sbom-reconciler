@@ -43,15 +43,15 @@ def load_previous_hash() -> str:
 
 
 def evaluate_decision(req: VerifyRequest) -> str:
-    # Minimal v1.0 API behavior:
-    # PASS if required fields exist and digest looks like sha256:...
-    # FAIL otherwise.
+    allowed_builders = ["github-actions"]
+
     if not req.artifact or not req.digest or not req.builder:
         return "FAIL"
     if not req.digest.startswith("sha256:"):
         return "FAIL"
+    if req.builder not in allowed_builders:
+        return "FAIL"
     return "PASS"
-
 
 def build_verification_record(req: VerifyRequest, decision: str) -> dict[str, Any]:
     previous_hash = load_previous_hash()
