@@ -1,6 +1,6 @@
 Diya v1.0 Freeze
 
-Frozen: March 26, 2026
+Frozen: March 31, 2026
 External dependent confirmed: consumer-pipeline
 Fail-closed: confirmed
 Engine: locked
@@ -38,3 +38,23 @@ All future changes must be versioned (v1.1, v1.2, etc.).
 Advance only if the next step increases dependency on Diya.
 
 If a step does not make Diya harder to remove, do not proceed.
+
+## Enforcement Proof (Final)
+
+Fail-closed enforcement has been explicitly validated in CI:
+
+- A request with an invalid builder ("unknown") produced decision = FAIL
+- `diya-gate` job failed
+- downstream `protected-job` did not run (skipped)
+- merge was blocked due to required status checks
+
+Pass behavior has also been validated:
+
+- A request with valid builder ("github-actions") produced decision = PASS
+- `diya-gate` job passed
+- downstream `protected-job` executed
+- merge was allowed
+
+This confirms:
+
+Diya is non-bypassable within the CI control flow.
