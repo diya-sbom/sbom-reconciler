@@ -37,6 +37,7 @@ jobs:
           export DIYA_API_KEY="${{ secrets.DIYA_API_KEY }}"
           python3 -m uvicorn api.server:app --host 127.0.0.1 --port 8000 &
           sleep 5
+          cat diya-api,log
 
       - name: Run Diya verification
         id: verify
@@ -47,7 +48,7 @@ jobs:
           RESPONSE=$(curl -s -X POST http://127.0.0.1:8000/verify \
             -H "Content-Type: application/json" \
             -H "x-api-Key: ${{ secrets.DIYA_API_KEY }}" \
-            -d '{"artifact":"a_cdx.json","digest":"sha256:test","builder":"github-actions"}')
+            -d '{"artifact":"a_cdx.json","digest":"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","builder":"github-actions"}')
 
           echo "$RESPONSE" > verification_record.json
           cat verification_record.json
