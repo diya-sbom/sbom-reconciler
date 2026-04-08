@@ -1,0 +1,13 @@
+{
+  "decision": "FAIL",
+  "verification_record": {
+    "timestamp": "ISO8601",
+    "artifact": "a_cdx.json",
+    "digest": "sha256:tampered",
+    "builder": "github-actions",
+    "decision": "FAIL",
+    "previous_hash": "sha256:...",
+    "entry_hash": "sha256:..."
+  },
+  "ledger_entry_hash": "sha256:..."
+}
