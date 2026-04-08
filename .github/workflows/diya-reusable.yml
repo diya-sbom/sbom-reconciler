@@ -62,8 +62,11 @@ jobs:
             -H "x-api-Key: ${{ secrets.DIYA_API_KEY }}" \
             -d '{"artifact":"a_cdx.json","digest":"sha256:test","builder":"github-actions"}')
 
-          echo "$RESPONSE" > verification_record.json
+          echo "$RESPONSE" > verification_record.json  
+
+          echo "----$VERIFICATION RESPONSE----" 
           cat verification_record.json
+          echo "------------------------------"
 
           STATUS=$(python3 -c "import json; print(json.load(open('verification_record.json'))['decision'])")
 
