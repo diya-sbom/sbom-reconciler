@@ -1,0 +1,5 @@
+{
+  "artifact": "a_cdx.json",
+  "digest": "sha256:tampered",
+  "builder": "github-actions"
+}
