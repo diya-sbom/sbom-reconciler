@@ -51,26 +51,11 @@ jobs:
     
             curl -s http://127.0.0.1:8000/health
 
-      - name: Run Diya verification
-        id: verify
+      - name: Diya Gate (enforced)
         shell: bash
         run: |
-          set -e
-
-          RESPONSE=$(curl -s -X POST http://127.0.0.1:8000/verify \
-            -H "Content-Type: application/json" \
-            -H "x-api-Key: ${{ secrets.DIYA_API_KEY }}" \
-            -d '{"artifact":"a_cdx.json","digest":"sha256:test","builder":"github-actions"}')
-
-          echo "$RESPONSE" > verification_record.json
-          cat verification_record.json
-
-          STATUS=$(python3 -c "import json; print(json.load(open('verification_record.json'))['decision'])")
-
-          if [ "$STATUS" != "PASS" ]; then
-            echo "Diya decision is $STATUS -> blocking pipeline"
-            exit 1
-          fi
+          chmod +x gate_decision.sh
+          ./gate_decision.sh
 
           echo "status=$STATUS" >> "$GITHUB_OUTPUT"
 
