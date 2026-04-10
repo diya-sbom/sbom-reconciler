@@ -1,5 +1,8 @@
 #!/bin/bash
 
+pkill -f "uvicorn" || true
+sleep 2
+
 set -e
 
 echo "Starting Diya API..."
@@ -21,11 +24,10 @@ echo "$RESPONSE" | tee gate_output.json
 
 DECISION=$(echo "$RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['decision'])")
 
-if [ "$DECISION" != "PASS" ]; then
+if [ "$DECISION" = "PASS" ]; then
+  echo "ALLOWED: verification passed"
+  exit 0
+else
   echo "BLOCKED: verification failed"
-  kill $PID
   exit 1
 fi
-
-echo "ALLOWED: verification passed"
-kill $PID
