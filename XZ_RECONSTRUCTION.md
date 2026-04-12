@@ -54,3 +54,12 @@ The compromised release would not have passed verification and would not have be
 
 The failure was not in code review.  
 It was in the absence of artifact-level verification.
+
+---
+
+## Why this matters
+
+Diya is designed to make this class of divergence visible before downstream use.
+
+It does not rely on repository trust alone.  
+It verifies the artifact actually being consumed, records the decision, and blocks continuation on failure.
