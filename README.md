@@ -136,3 +136,15 @@ Result:
 
 
 BLOCKED: verification failed
+
+## API Contract (v1.0)
+
+The `/verify` endpoint returns:
+
+{
+  "decision": "PASS | FAIL",
+  "verification_record": { ... },
+  "ledger_entry_hash": "..."
+}
+
+This structure is stable for v1.0 and is intended for external integration.
