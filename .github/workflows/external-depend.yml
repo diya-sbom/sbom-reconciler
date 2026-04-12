@@ -12,14 +12,17 @@ jobs:
   dependent-job:
     needs: call-diya
     runs-on: ubuntu-latest
-
     steps:
-      - name: Enforce Diya decision
-        run: |
-           if [ "${{ needs.call-diya.outputs.verification_status }}" != "PASS" ]; then
-             echo "Blocked by Diya"
-             exit 1
-           fi
+    - name: Debug Diya output
+      run: |
+        echo "Diya output raw: '${{ needs.call-diya.outputs.verification_status }}'"
 
-      - name: Continue execution
-        run: echo "Pipeline allowed by Diya"
+    - name: Enforce Diya decision
+      run: |
+         if [ "${{ needs.call-diya.outputs.verification_status }}" != "PASS" ]; then
+          echo "Blocked by Diya"
+          exit 1
+         fi
+
+    - name: Continue execution
+      run: echo "Pipeline allowed by Diya"
