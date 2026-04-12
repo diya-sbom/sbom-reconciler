@@ -1,0 +1,13 @@
+artifact:
+  require_present: true
+
+digest:
+  require_present: true
+
+exception:
+  allowed: true
+
+builder:
+  allowed:
+    - github-actions
+    - trusted-ci

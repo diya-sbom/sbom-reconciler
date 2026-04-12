@@ -1,0 +1,19 @@
+policy_id: default-v1
+
+artifact:
+  require_present: true
+
+digest:
+  require_present: true
+
+builder:
+  allowed:
+    - github-actions
+
+decision:
+  fail_on_missing_artifact: true
+  fail_on_missing_digest: true
+  fail_on_unapproved_builder: true
+
+exception:
+  allowed: true
