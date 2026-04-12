@@ -35,21 +35,21 @@ jobs:
       - name: Start Diya API
         shell: bash
         run: |
-          export DIYA_API_KEY="${{ secrets.DIYA_API_KEY }}"
-          nohup python3 -m uvicorn api.server:app --host 127.0.0.1 --port 8000 > server.log 2>&1 &
-    
-          echo "Waiting for API to be ready..."
+         export DIYA_API_KEY="${{ secrets.DIYA_API_KEY }}"
+         nohup python3 -m uvicorn api.server:app --host 127.0.0.1 --port 8000 > server.log 2>&1 &
 
-          for i in {1..15}; do
+         echo "Waiting for API to be ready..."
+
+         for i in {1..30}; do
            if curl -s http://127.0.0.1:8000/health > /dev/null; then
              echo "API is ready"
              break
            fi
-            echo "Still waiting..."
-            sleep 2
-          done
+           echo "Still waiting..."
+           sleep 2
+         done
 
-          curl -f http://127.0.0.1:8000/health || (cat server.log && exit 1)
+         curl -f http://127.0.0.1:8000/health || (cat server.log && exit 1)
 
       - name: Diya Gate (enforced)
         shell: bash
