@@ -13,7 +13,7 @@ jobs:
     needs: call-diya
     runs-on: ubuntu-latest
     steps:
-    - name: Debug Diya output
+    - name: Enforce Diya decision
       run: |
         echo "Diya output raw: '${{ needs.call-diya.outputs.verification_status }}'"
 
