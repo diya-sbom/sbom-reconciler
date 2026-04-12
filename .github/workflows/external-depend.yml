@@ -19,10 +19,18 @@ jobs:
 
     - name: Enforce Diya decision
       run: |
-         if [ "${{ needs.call-diya.outputs.verification_status }}" != "PASS" ]; then
+        STATUS="${{ needs.call-diya.outputs.verification_status }}"
+        echo "Diya status = '$STATUS'"
+
+        if [ -z "$STATUS" ]; then
+        echo "ERROR: Missing Diya output"
+        exit 1
+        fi
+
+        if [ "$STATUS" != "PASS" ]; then
           echo "Blocked by Diya"
           exit 1
-         fi
+        fi
 
     - name: Continue execution
       run: echo "Pipeline allowed by Diya"
