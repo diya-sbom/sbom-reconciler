@@ -40,7 +40,7 @@ jobs:
     
           echo "Waiting for API to be ready..."
 
-          for i in {1..15}; do
+          for i in {1..30}; do
            if curl -s http://127.0.0.1:8000/health > /dev/null; then
              echo "API is ready"
              break
