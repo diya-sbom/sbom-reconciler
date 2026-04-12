@@ -1,10 +1,9 @@
 {
-  "record_version": "1.0",
+  "timestamp": "2026-04-12T03:18:55.817546Z",
+  "artifact": "a_cdx.json",
+  "digest": "sha256:test",
+  "builder": "github-actions",
   "decision": "PASS",
-  "artifact_id": "artifact.txt",
-  "dependency_id": "placeholder",
-  "version": "v1.0",
-  "commit_sha": "placeholder",
-  "timestamp": "2026-03-22T05:16:01.956441Z",
-  "ledger_hash": "placeholder"
+  "previous_hash": "7a0577e6e8551b45f88b6aae80d3a6c528d33d5072e787d7732a13d7cb17e042",
+  "entry_hash": "d61259d35ebffff29081b3e06990cabecc5bdb7d7cef8aceca93f8c14c753a48"
 }

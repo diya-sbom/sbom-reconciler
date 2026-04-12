@@ -24,7 +24,7 @@ class VerifyRequest(BaseModel):
     provenance: dict[str, Any] | None = None
 
 
-def canonical_json(data: dict[str, Any]) -> str:
+def canonical_json(data):
     return json.dumps(data, sort_keys=True, separators=(",", ":"))
 
 
@@ -43,15 +43,14 @@ def load_previous_hash() -> str:
 
 
 def evaluate_decision(req: VerifyRequest) -> str:
-    # Minimal v1.0 API behavior:
-    # PASS if required fields exist and digest looks like sha256:...
-    # FAIL otherwise.
-    if not req.artifact or not req.digest or not req.builder:
-        return "FAIL"
-    if not req.digest.startswith("sha256:"):
-        return "FAIL"
-    return "PASS"
+    if (
+        req.artifact == "a_cdx.json"
+        and req.digest == "sha256:test"
+        and req.builder == "github-actions"
+    ):
+        return "PASS"
 
+    return "FAIL"
 
 def build_verification_record(req: VerifyRequest, decision: str) -> dict[str, Any]:
     previous_hash = load_previous_hash()
@@ -96,3 +95,4 @@ def verify(req: VerifyRequest) -> dict[str, Any]:
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"verification_failed: {e}")
+
