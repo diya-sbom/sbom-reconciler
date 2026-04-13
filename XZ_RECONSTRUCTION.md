@@ -46,6 +46,8 @@ Result: BLOCK
 
 ## Result
 
+The failure manifests as a deterministic verification mismatch, not a subjective assessment.
+
 The compromised release would not have passed verification and would not have been consumed downstream.
 
 ---
