@@ -13,9 +13,8 @@ jobs:
     needs: call-diya
     runs-on: ubuntu-latest
     steps:
-    - name: Enforce Diya decision
-      run: |
-        echo "Diya output raw: '${{ needs.call-diya.outputs.verification_status }}'"
+    - name: Print Diya status
+      run: echo "STATUS=${{ needs.call-diya.outputs.verification_status }}"
 
     - name: Enforce Diya decision
       run: |
@@ -23,8 +22,8 @@ jobs:
         echo "Diya status = '$STATUS'"
 
         if [ -z "$STATUS" ]; then
-        echo "ERROR: Missing Diya output"
-        exit 1
+          echo "ERROR: Missing Diya output"
+          exit 1
         fi
 
         if [ "$STATUS" != "PASS" ]; then
