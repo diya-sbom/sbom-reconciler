@@ -6,6 +6,8 @@ It enforces a simple rule:
 
 No artifact is allowed to deploy without a deterministic verification record.
 
+See a real record → [evidence/verification_record.json](./evidence/verification_record.json)
+
 ---
 
 
