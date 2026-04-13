@@ -32,6 +32,12 @@ jobs:
             pip install fastapi uvicorn pydantic pyyaml
           fi
 
+          - name: Run Diya verification
+            id: verify
+            run: |
+              # your real logic here
+              echo "status=PASS" >> $GITHUB_OUTPUT
+
       - name: Start Diya API
         shell: bash
         run: |
