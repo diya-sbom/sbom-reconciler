@@ -7,7 +7,7 @@
 - Downstream systems built from the tarball, not the repository  
 - Artifact ≠ Source — the divergence went undetected at release time  
 
-This is documented and uncontested.
+This sequence is publicly documented and widely established.
 
 ---
 
