@@ -1,0 +1,35 @@
+name: External Dependent Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  call-diya:
+    uses: ./.github/workflows/diya-reusable.yml
+    secrets: inherit
+
+  dependent-job:
+    needs: call-diya
+    runs-on: ubuntu-latest
+    steps:
+    - name: Print Diya status
+      run: echo "STATUS=${{ needs.call-diya.outputs.verification_status }}"
+
+    - name: Enforce Diya decision
+      run: |
+        STATUS="${{ needs.call-diya.outputs.verification_status }}"
+        echo "Diya status = '$STATUS'"
+
+        if [ -z "$STATUS" ]; then
+          echo "ERROR: Missing Diya output"
+          exit 1
+        fi
+
+        if [ "$STATUS" != "PASS" ]; then
+          echo "Blocked by Diya"
+          exit 1
+        fi
+
+    - name: Continue execution
+      run: echo "Pipeline allowed by Diya"

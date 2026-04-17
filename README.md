@@ -1,17 +1,34 @@
 # Diya
 
+
 Diya is a verification gate for software supply chains.
 
 It enforces a simple rule:
 
 No artifact is allowed to deploy without a deterministic verification record.
 
+See a real record → [evidence/verification_record.json](./evidence/verification_record.json)
+
+
+> If there is no verification record, the deployment did not happen.
+
 ---
 
 
+## Example Verification Record (PASS)
+
+{
+  "artifact": "example-service:v1.2.3",
+  "digest": "sha256:abc123...",
+  "builder": "github-actions",
+  "timestamp": "2026-01-01T12:00:00Z",
+  "provenance_verified": true,
+  "policy_result": "PASS",
+  "decision": "PASS"
+}
 
 
-# Diya — Verification Gate for Software Supply Chain
+# Diya — “Diya produces a deterministic Verification Record for every deployment decision.”
 
 ## The Problem
 
