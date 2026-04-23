@@ -115,6 +115,10 @@ def verify(
     req: VerifyRequest,
     x_api_key: str | None = Header(default=None),
 ) -> dict[str, Any]:
+ add-run-script
+
+
+ main
     expected_api_key = os.getenv("DIYA_API_KEY")
 
     if not expected_api_key:
