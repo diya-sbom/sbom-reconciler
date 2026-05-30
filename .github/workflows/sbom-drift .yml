@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
- sbom_drift_check:
+  sbom_drift_check:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,23 +22,27 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Debug SBOM files
+      - name: Install API dependencies
         run: |
-          echo "=== a_cdx.json ==="
-          cat a_cdx.json
-          echo "=== b_cdx.json ==="
-          cat b_cdx.json
+          python -m pip install --upgrade pip
+          python -m pip install fastapi uvicorn
 
-      - name: SBOM diff (CI mode)
+      - name: Start Diya API
         run: |
-          python3 src/sbom_diff.py a_cdx.json b_cdx.json --fail-on-change > drift_report.txt 2>&1
-          status=$?
-          cat drift_report.txt
-          exit $status
+          python -m uvicorn server:app --host 127.0.0.1 --port 8000 &
+          sleep 5
 
-      - name: Upload drift evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: sbom-drift-report
-          path: drift_report.txt
+      - name: Call Diya API
+        run: |
+          RESPONSE=$(curl -s -X POST http://127.0.0.1:8000/verify \
+            -H "Content-Type: application/json" \
+            -d '{"baseline":"a_cdx.json","current":"b_cdx.json"}')
+
+          echo "$RESPONSE"
+
+          DECISION=$(echo "$RESPONSE" | python -c "import sys, json; print(json.load(sys.stdin)['decision'])")
+
+          if [ "$DECISION" != "PASS" ]; then
+            echo "Diya API failed"
+            exit 1
+          fi
