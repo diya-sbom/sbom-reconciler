@@ -1,33 +1,24 @@
 #!/bin/bash
 
-pkill -f "uvicorn" || true
-sleep 2
+echo "Calling Diya..."
 
-set -e
-
-echo "Starting Diya API..."
-export DIYA_API_KEY="test-key"
-
-python3 -m uvicorn api.server:app --host 127.0.0.1 --port 8000 &
-PID=$!
-
-sleep 3
-
-echo "Calling /verify..."
-
-RESPONSE=$(curl -s -X POST http://127.0.0.1:8000/verify \
+response=$(curl -s -X POST http://127.0.0.1:8000/verify \
   -H "Content-Type: application/json" \
-  -H "x-api-key: test-key" \
-  -d @examples/pass/request.json)
+  -H "x-api-key: $DIYA_API_KEY" \
+  -d '{
+    "artifact": "test-image",
+    "digest": "sha256:abc123",
+    "builder": "github-actions"
+  }')
 
-echo "$RESPONSE" | tee gate_output.json
+echo "Response:"
+echo "$response"
 
-DECISION=$(echo "$RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['decision'])")
+decision=$(echo "$response" | python3 -c 'import sys, json; print(json.load(sys.stdin)["decision"])')
 
-if [ "$DECISION" = "PASS" ]; then
-  echo "ALLOWED: verification passed"
-  exit 0
-else
-  echo "BLOCKED: verification failed"
+if [ "$decision" != "PASS" ]; then
+  echo "❌ Blocked by Diya"
   exit 1
 fi
+
+echo "✅ Passed Diya"

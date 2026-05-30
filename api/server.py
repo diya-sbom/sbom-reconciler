@@ -16,6 +16,9 @@ LEDGER_PATH = Path("ledger/ledger.jsonl")
 RECORD_PATH = Path("verification_record.json")
 
 
+# -----------------------------
+# Models
+# -----------------------------
 class VerifyRequest(BaseModel):
     artifact: str
     digest: str
@@ -24,6 +27,9 @@ class VerifyRequest(BaseModel):
     approver: str | None = None
 
 
+# -----------------------------
+# Helpers
+# -----------------------------
 def canonical_json(data: dict[str, Any]) -> str:
     return json.dumps(data, sort_keys=True, separators=(",", ":"))
 
@@ -49,6 +55,9 @@ def load_previous_hash() -> str:
     return last.get("entry_hash", "")
 
 
+# -----------------------------
+# Core Logic
+# -----------------------------
 def evaluate_decision(req: VerifyRequest) -> str:
     allowed_builders = ["github-actions"]
 
@@ -93,6 +102,9 @@ def persist_record(record: dict[str, Any]) -> None:
         f.write(json.dumps(record) + "\n")
 
 
+# -----------------------------
+# Routes
+# -----------------------------
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
@@ -103,7 +115,10 @@ def verify(
     req: VerifyRequest,
     x_api_key: str | None = Header(default=None),
 ) -> dict[str, Any]:
+ add-run-script
 
+
+ main
     expected_api_key = os.getenv("DIYA_API_KEY")
 
     if not expected_api_key:
