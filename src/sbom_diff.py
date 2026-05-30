@@ -116,6 +116,13 @@ def main() -> None:
 
     report = diff_sboms(a_doc, b_doc)
 
+    names_a = {c["name"] for c in a_doc["components"]}
+    names_b = {c["name"] for c in b_doc["components"]}
+
+if names_a != names_b:
+    print("❌ SBOM drift detected: component names changed")
+    exit(1)
+
     # Always print
     print(json.dumps(report, indent=2))
 
